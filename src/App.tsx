@@ -19,6 +19,9 @@ const App: React.FunctionComponent = () => {
           Learn React
         </a>
       </header>
+      <div>
+        Hello World
+      </div>
     </div>
   );
 };
