@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^4.11.3",
+    "@material-ui/icons": "^4.11.2",
     "@payrollah/payrollah-registry": "^1.1.1",
     "ethers": "^5.0.32",
     "react": "^17.0.2",
