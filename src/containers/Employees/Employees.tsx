@@ -23,6 +23,7 @@ import {
   MONTHLY,
   PART_TIME,
 } from "../../constants/salary";
+import RemoveEmployee from "./RemoveEmployee/RemoveEmployee";
 
 const useStyles = makeStyles((theme) => ({
   buttonContainer: {
@@ -37,14 +38,20 @@ interface EditCellProps {
   row: GridRowModel;
 }
 
+interface DeleteCellProps {
+  row: GridRowModel;
+}
+
 const Employees: React.FunctionComponent = () => {
   const classes = useStyles();
 
   const [createEmployeeOpen, setCreateEmployeeOpen] = useState(false);
   const [editEmployeeOpen, setEditEmployeeOpen] = useState(false);
+  const [removeEmployeeOpen, setRemoveEmployeeOpen] = useState(false);
   const [salaryAmountToEdit, setSalaryAmountToEdit] = useState(0);
   const [salaryPeriodToEdit, setSalaryPeriodToEdit] = useState("");
   const [employeeAddressToEdit, setEmployeeAddressToEdit] = useState("");
+  const [employeeAddressToRemove, setEmployeeAddressToRemove] = useState("");
 
   const EditCell: React.FunctionComponent<EditCellProps> = ({
     row,
@@ -63,9 +70,16 @@ const Employees: React.FunctionComponent = () => {
     );
   };
 
-  const DeleteCell: React.FunctionComponent = () => {
+  const DeleteCell: React.FunctionComponent<DeleteCellProps> = ({
+    row,
+  }: DeleteCellProps) => {
     return (
-      <IconButton onClick={() => console.log("a")}>
+      <IconButton
+        onClick={() => {
+          setEmployeeAddressToRemove(row.address);
+          setRemoveEmployeeOpen(true);
+        }}
+      >
         <DeleteIcon />
       </IconButton>
     );
@@ -133,7 +147,7 @@ const Employees: React.FunctionComponent = () => {
       sortable: false,
       headerName: "Remove Employee",
       // eslint-disable-next-line react/display-name
-      renderCell: (params: GridCellParams) => <DeleteCell />,
+      renderCell: (params: GridCellParams) => <DeleteCell row={params.row} />,
       disableColumnMenu: true,
       disableClickEventBubbling: true,
     },
@@ -174,6 +188,11 @@ const Employees: React.FunctionComponent = () => {
         currSalaryPeriod={salaryPeriodToEdit}
         onClose={() => setEditEmployeeOpen(false)}
         employeeAddress={employeeAddressToEdit}
+      />
+      <RemoveEmployee
+        open={removeEmployeeOpen}
+        onClose={() => setRemoveEmployeeOpen(false)}
+        employeeAddress={employeeAddressToRemove}
       />
       <Typography variant="h3" gutterBottom>
         Employees
