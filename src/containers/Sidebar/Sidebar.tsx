@@ -12,8 +12,11 @@ import React from "react";
 import "./Sidebar.css";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
+import GroupIcon from "@material-ui/icons/Group";
+import ReceiptIcon from "@material-ui/icons/Receipt";
+import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
 import { Link } from "react-router-dom";
-import { EMPLOYEES } from "../../constants/routePaths";
+import { CLAIMS, EMPLOYEES, TRANSACTIONS } from "../../constants/routePaths";
 
 const drawerWidth = 240;
 
@@ -43,16 +46,30 @@ const Sidebar: React.FunctionComponent = () => {
       <Toolbar />
       <div className={classes.drawerContainer}>
         <List>
-          {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-            <Link to={EMPLOYEES} key={text}>
-              <ListItem button key={text}>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            </Link>
-          ))}
+          <Link to={EMPLOYEES}>
+            <ListItem button>
+              <ListItemIcon>
+                <GroupIcon />
+              </ListItemIcon>
+              <ListItemText primary={"Employees"} />
+            </ListItem>
+          </Link>
+          <Link to={TRANSACTIONS}>
+            <ListItem button>
+              <ListItemIcon>
+                <ReceiptIcon />
+              </ListItemIcon>
+              <ListItemText primary={"Transactions"} />
+            </ListItem>
+          </Link>
+          <Link to={CLAIMS}>
+            <ListItem button>
+              <ListItemIcon>
+                <AssignmentIndIcon />
+              </ListItemIcon>
+              <ListItemText primary={"Claims"} />
+            </ListItem>
+          </Link>
         </List>
         <Divider />
         <List>
