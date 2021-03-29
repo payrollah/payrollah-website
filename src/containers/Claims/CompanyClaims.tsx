@@ -1,8 +1,8 @@
 import {
-  Button,
-  Container,
+  // Button,
+  // Container,
   IconButton,
-  makeStyles,
+  // makeStyles,
   Typography,
 } from "@material-ui/core";
 import React, { useState } from "react";
@@ -13,27 +13,31 @@ import {
   GridToolbar,
   GridRowModel,
 } from "@material-ui/data-grid";
-import DeleteIcon from "@material-ui/icons/Delete";
 import MessageIcon from "@material-ui/icons/Message";
-import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
-import CreateClaim from "./CreateClaim/CreateClaim";
-import CancelClaim from "./CancelClaim/CancelClaim";
-import ViewClaimMessage from "./ViewClaimMessage/ViewClaimMessage";
+import ThumbUpIcon from "@material-ui/icons/ThumbUp";
+import ThumbDownIcon from "@material-ui/icons/ThumbDown";
+import ViewClaimMessage from "../Claims/ViewClaimMessage/ViewClaimMessage";
+import AcceptClaim from "./AcceptClaim/AcceptClaim";
+import RejectClaim from "./RejectClaim/RejectClaim";
 
-const useStyles = makeStyles((theme) => ({
-  buttonContainer: {
-    display: "flex",
-    justifyContent: "flex-end",
-    paddingTop: "1em",
-    paddingBottom: "1em",
-  },
-}));
+// const useStyles = makeStyles((theme) => ({
+//   buttonContainer: {
+//     display: "flex",
+//     justifyContent: "flex-end",
+//     paddingTop: "1em",
+//     paddingBottom: "1em",
+//   },
+// }));
 
 interface ViewCellProps {
   row: GridRowModel;
 }
 
-interface DeleteCellProps {
+interface AcceptCellProps {
+  row: GridRowModel;
+}
+
+interface RejectCellProps {
   row: GridRowModel;
 }
 
@@ -42,17 +46,18 @@ interface DeleteCellProps {
 //   currency: "USD",
 // });
 
-const Claims: React.FunctionComponent = () => {
-  const classes = useStyles();
-
-  const [createClaimOpen, setCreateClaimOpen] = useState(false);
+const CompanyClaims: React.FunctionComponent = () => {
+  // const classes = useStyles();
 
   const [viewClaimMessageOpen, setViewClaimMessageOpen] = useState(false);
   const [messageToClaimView, setMessageToClaimView] = useState("");
   const [messageToRejectView, setMessageToRejectView] = useState("");
 
-  const [cancelClaimOpen, setCancelClaimOpen] = useState(false);
-  const [claimIdToCancel, setClaimIdToCancel] = useState(0);
+  const [acceptClaimOpen, setAcceptClaimOpen] = useState(false);
+  const [claimIdToAccept, setClaimIdToAccept] = useState(0);
+
+  const [rejectClaimOpen, setRejectClaimOpen] = useState(false);
+  const [claimIdToReject, setClaimIdToReject] = useState(0);
 
   const ViewCell: React.FunctionComponent<ViewCellProps> = ({
     row,
@@ -78,17 +83,32 @@ const Claims: React.FunctionComponent = () => {
     );
   };
 
-  const DeleteCell: React.FunctionComponent<DeleteCellProps> = ({
+  const AcceptCell: React.FunctionComponent<AcceptCellProps> = ({
     row,
-  }: DeleteCellProps) => {
+  }: AcceptCellProps) => {
     return (
       <IconButton
         onClick={() => {
-          setClaimIdToCancel(row.message);
-          setCancelClaimOpen(true);
+          setClaimIdToAccept(row.message);
+          setAcceptClaimOpen(true);
         }}
       >
-        <DeleteIcon />
+        <ThumbUpIcon />
+      </IconButton>
+    );
+  };
+
+  const RejectCell: React.FunctionComponent<RejectCellProps> = ({
+    row,
+  }: RejectCellProps) => {
+    return (
+      <IconButton
+        onClick={() => {
+          setClaimIdToReject(row.message);
+          setRejectClaimOpen(true);
+        }}
+      >
+        <ThumbDownIcon />
       </IconButton>
     );
   };
@@ -98,13 +118,13 @@ const Claims: React.FunctionComponent = () => {
     {
       field: "date",
       headerName: "Date",
-      width: 125,
+      width: 100,
       type: "date",
       disableClickEventBubbling: true,
     },
     {
-      field: "company",
-      headerName: "Company",
+      field: "employee",
+      headerName: "Employee",
       width: 150,
       disableClickEventBubbling: true,
     },
@@ -161,12 +181,22 @@ const Claims: React.FunctionComponent = () => {
       disableClickEventBubbling: true,
     },
     {
-      field: "delete",
+      field: "accept",
       width: 80,
       sortable: false,
-      headerName: "Cancel",
+      headerName: "Accept",
       // eslint-disable-next-line react/display-name
-      renderCell: (params: GridCellParams) => <DeleteCell row={params.row} />,
+      renderCell: (params: GridCellParams) => <AcceptCell row={params.row} />,
+      disableColumnMenu: true,
+      disableClickEventBubbling: true,
+    },
+    {
+      field: "reject",
+      width: 80,
+      sortable: false,
+      headerName: "Reject",
+      // eslint-disable-next-line react/display-name
+      renderCell: (params: GridCellParams) => <RejectCell row={params.row} />,
       disableColumnMenu: true,
       disableClickEventBubbling: true,
     },
@@ -176,7 +206,7 @@ const Claims: React.FunctionComponent = () => {
     {
       id: 1,
       date: new Date(),
-      company: "ABC Company",
+      employee: "John Doe",
       timesheet: 100,
       salaryAmount: 2000,
       claimType: "Part-Time",
@@ -188,7 +218,7 @@ const Claims: React.FunctionComponent = () => {
     {
       id: 2,
       date: new Date(),
-      company: "ABC Company",
+      employee: "Jane Doe",
       timesheet: 30,
       salaryAmount: 600,
       claimType: "Loan",
@@ -199,7 +229,7 @@ const Claims: React.FunctionComponent = () => {
     {
       id: 3,
       date: new Date(),
-      company: "ABC Company",
+      employee: "John Doe",
       timesheet: 50,
       salaryAmount: 1000,
       claimType: "Loan",
@@ -211,38 +241,25 @@ const Claims: React.FunctionComponent = () => {
 
   return (
     <React.Fragment>
-      <CreateClaim
-        open={createClaimOpen}
-        onClose={() => setCreateClaimOpen(false)}
-      />
       <ViewClaimMessage
         open={viewClaimMessageOpen}
         messageToClaim={messageToClaimView}
         messageToReject={messageToRejectView}
         onClose={() => setViewClaimMessageOpen(false)}
       />
-      <CancelClaim
-        open={cancelClaimOpen}
-        onClose={() => setCancelClaimOpen(false)}
-        claimId={claimIdToCancel}
+      <AcceptClaim
+        open={acceptClaimOpen}
+        onClose={() => setAcceptClaimOpen(false)}
+        claimId={claimIdToAccept}
+      />
+      <RejectClaim
+        open={rejectClaimOpen}
+        onClose={() => setRejectClaimOpen(false)}
+        claimId={claimIdToReject}
       />
       <Typography variant="h3" gutterBottom>
         Claims
       </Typography>
-      <Container
-        disableGutters
-        maxWidth={false}
-        className={classes.buttonContainer}
-      >
-        <Button
-          variant="contained"
-          color="primary"
-          endIcon={<AssignmentIndIcon />}
-          onClick={() => setCreateClaimOpen(true)}
-        >
-          New Claim
-        </Button>
-      </Container>
       <div style={{ height: 400, width: "100%", textAlign: "center" }}>
         <DataGrid
           rows={rows}
@@ -257,4 +274,4 @@ const Claims: React.FunctionComponent = () => {
   );
 };
 
-export default Claims;
+export default CompanyClaims;
