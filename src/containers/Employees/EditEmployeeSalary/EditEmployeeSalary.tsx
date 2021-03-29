@@ -1,14 +1,14 @@
 import {
   Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   FormControl,
   FormControlLabel,
   FormLabel,
   LinearProgress,
-  makeStyles,
-  Modal,
-  Paper,
   Radio,
-  Typography,
 } from "@material-ui/core";
 import { Field, Form, Formik, FormikErrors, FormikValues } from "formik";
 import { TextField, RadioGroup } from "formik-material-ui";
@@ -23,68 +23,42 @@ interface Props {
   employeeAddress: string;
 }
 
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    position: "absolute",
-    width: 400,
-    backgroundColor: theme.palette.background.paper,
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3),
-  },
-  buttonRight: {
-    marginLeft: "0.75rem",
-  },
-  buttonLeft: {
-    marginRight: "0.75rem",
-  },
-}));
-
 const EditEmployeeSalary: React.FunctionComponent<Props> = ({
   open,
   onClose,
   currSalaryAmount,
   currSalaryPeriod,
 }: Props) => {
-  const classes = useStyles();
   return (
-    <Modal
-      open={open}
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <Paper className={classes.paper}>
-        <Typography variant="h5" gutterBottom>
-          Update Employee Salary
-        </Typography>
-        <Formik
-          initialValues={{
-            salaryAmount: currSalaryAmount,
-            salaryPeriod: currSalaryPeriod,
-          }}
-          validate={(values) => {
-            const errors: FormikErrors<FormikValues> = {};
+    <Dialog open={open} onClose={onClose} fullWidth>
+      <DialogTitle>Update Employee Salary</DialogTitle>
+      <Formik
+        initialValues={{
+          salaryAmount: currSalaryAmount,
+          salaryPeriod: currSalaryPeriod,
+        }}
+        validate={(values) => {
+          const errors: FormikErrors<FormikValues> = {};
 
-            if (!values.salaryAmount) {
-              errors.salaryAmount = "Required";
-            }
+          if (!values.salaryAmount) {
+            errors.salaryAmount = "Required";
+          }
 
-            if (!values.salaryPeriod) {
-              errors.salaryPeriod = "Required";
-            }
-            return errors;
-          }}
-          onSubmit={(values, { setSubmitting }) => {
-            setTimeout(() => {
-              setSubmitting(false);
-              alert(JSON.stringify(values, null, 2));
-            }, 500);
-          }}
-        >
-          {({ submitForm, isSubmitting, dirty }) => (
-            <Form>
+          if (!values.salaryPeriod) {
+            errors.salaryPeriod = "Required";
+          }
+          return errors;
+        }}
+        onSubmit={(values, { setSubmitting }) => {
+          setTimeout(() => {
+            setSubmitting(false);
+            alert(JSON.stringify(values, null, 2));
+          }, 500);
+        }}
+      >
+        {({ submitForm, isSubmitting, dirty }) => (
+          <Form>
+            <DialogContent>
               <Field
                 component={TextField}
                 type="number"
@@ -112,30 +86,23 @@ const EditEmployeeSalary: React.FunctionComponent<Props> = ({
                 </Field>
               </FormControl>
               {isSubmitting && <LinearProgress />}
-              <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                <Button
-                  variant="contained"
-                  disabled={isSubmitting}
-                  onClick={onClose}
-                  className={classes.buttonLeft}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  disabled={isSubmitting || !dirty}
-                  onClick={submitForm}
-                  className={classes.buttonRight}
-                >
-                  Submit
-                </Button>
-              </div>
-            </Form>
-          )}
-        </Formik>
-      </Paper>
-    </Modal>
+            </DialogContent>
+            <DialogActions>
+              <Button disabled={isSubmitting} onClick={onClose}>
+                Cancel
+              </Button>
+              <Button
+                color="primary"
+                disabled={isSubmitting || !dirty}
+                onClick={submitForm}
+              >
+                Submit
+              </Button>
+            </DialogActions>
+          </Form>
+        )}
+      </Formik>
+    </Dialog>
   );
 };
 
