@@ -25,6 +25,7 @@ import {
   Task,
   Worker,
 } from "@payrollah/payrollah-registry/dist/ts/contracts";
+import MetaMaskOnboarding from "@metamask/onboarding";
 
 const theme = createMuiTheme({
   overrides: {
@@ -60,30 +61,32 @@ const App: React.FunctionComponent = () => {
 
   useEffect(() => {
     const { ethereum } = window as any;
-    ethereum.send("eth_requestAccounts");
-    const provider = new ethers.providers.Web3Provider(ethereum);
-    setEtherProvider(provider);
+    if (MetaMaskOnboarding.isMetaMaskInstalled()) {
+      ethereum.send("eth_requestAccounts");
+      const provider = new ethers.providers.Web3Provider(ethereum);
+      setEtherProvider(provider);
 
-    const companyContract = Company__factory.connect(
-      COMPANY_CONTRACT_ADDR,
-      provider
-    );
-    setCompanyContract(companyContract);
+      const companyContract = Company__factory.connect(
+        COMPANY_CONTRACT_ADDR,
+        provider
+      );
+      setCompanyContract(companyContract);
 
-    const workerContract = Worker__factory.connect(
-      WORKER_CONTRACT_ADDR,
-      provider
-    );
-    setWorkerContract(workerContract);
+      const workerContract = Worker__factory.connect(
+        WORKER_CONTRACT_ADDR,
+        provider
+      );
+      setWorkerContract(workerContract);
 
-    const taskContract = Task__factory.connect(TASK_CONTRACT_ADDR, provider);
-    setTaskContract(taskContract);
+      const taskContract = Task__factory.connect(TASK_CONTRACT_ADDR, provider);
+      setTaskContract(taskContract);
 
-    const jobCreatorContract = JobCreator__factory.connect(
-      JOB_CREATOR_CONTRACT_ADDR,
-      provider
-    );
-    setJobCreatorContract(jobCreatorContract);
+      const jobCreatorContract = JobCreator__factory.connect(
+        JOB_CREATOR_CONTRACT_ADDR,
+        provider
+      );
+      setJobCreatorContract(jobCreatorContract);
+    }
   }, []);
 
   return (
