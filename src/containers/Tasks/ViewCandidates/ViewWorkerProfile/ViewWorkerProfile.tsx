@@ -30,10 +30,20 @@ const ViewWorkerProfile: React.FunctionComponent<Props> = ({
       </DialogContent>
       <DialogContent dividers>
         <Typography gutterBottom>
-          Work 1: <a href="https://www.google.com.sg/">www.google.com.sg</a>
+          Work 1:{" "}
+          <a href="https://www.google.com.sg/" target="_blank" rel="noreferrer">
+            www.google.com.sg
+          </a>
         </Typography>
         <Typography gutterBottom>
-          Work 2: <a href="https://luminus.nus.edu.sg/">luminus.nus.edu.sg/</a>
+          Work 2:{" "}
+          <a
+            href="https://luminus.nus.edu.sg/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            luminus.nus.edu.sg/
+          </a>
         </Typography>
       </DialogContent>
       <DialogActions>

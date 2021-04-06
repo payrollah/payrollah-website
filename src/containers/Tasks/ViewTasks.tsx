@@ -16,16 +16,9 @@ import {
 import PeopleIcon from "@material-ui/icons/People";
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import AssignmentIcon from "@material-ui/icons/Assignment";
+import GetAppIcon from "@material-ui/icons/GetApp";
 import AddTask from "./AddTask/AddTask";
 import ApproveTask from "./ApproveTask/ApproveTask";
-// import ViewCandidates from "./ViewCandidates/ViewCandidates";
-
-interface Props {
-  open: boolean;
-  onClose: () => void;
-  jobTitle: string;
-  jobAddr: string;
-}
 
 const useStyles = makeStyles((theme) => ({
   buttonContainer: {
@@ -36,15 +29,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ViewTasks: React.FunctionComponent<Props> = ({
-  open,
-  onClose,
-  jobTitle = "jobTitle",
-  jobAddr,
-}: Props) => {
+const jobTitle = "Job Title";
+
+const jobAddr = new URLSearchParams(window.location.search).get("job");
+
+const ViewTasks: React.FunctionComponent = () => {
   const classes = useStyles();
 
   interface ViewCellProps {
+    row: GridRowModel;
+  }
+
+  interface LinkCellProps {
     row: GridRowModel;
   }
 
@@ -53,10 +49,6 @@ const ViewTasks: React.FunctionComponent<Props> = ({
   }
 
   const [addTaskOpen, setAddTaskOpen] = useState(false);
-
-  // const [viewCandidatesOpen, setViewCandidatesOpen] = useState(false);
-  // const [taskTitleToView, setTaskTitleToView] = useState("");
-  // const [taskIdToView, setTaskIdToView] = useState(0);
 
   const [approveTaskOpen, setApproveTaskOpen] = useState(false);
   const [taskIdToApprove, setTaskIdToApprove] = useState(0);
@@ -67,12 +59,24 @@ const ViewTasks: React.FunctionComponent<Props> = ({
     return (
       <IconButton
         onClick={() => {
-          // setTaskTitleToView(row.jobTitle);
-          // setTaskIdToView(row.taskId);
-          // setViewCandidatesOpen(true);
+          window.location.href = "/candidates?task=" + row.taskId;
         }}
       >
         <PeopleIcon />
+      </IconButton>
+    );
+  };
+
+  const LinkCell: React.FunctionComponent<LinkCellProps> = ({
+    row,
+  }: LinkCellProps) => {
+    return (
+      <IconButton
+        onClick={() => {
+          window.open(row.evidence);
+        }}
+      >
+        <GetAppIcon />
       </IconButton>
     );
   };
@@ -140,6 +144,8 @@ const ViewTasks: React.FunctionComponent<Props> = ({
       field: "evidence",
       headerName: "Work",
       width: 90,
+      // eslint-disable-next-line react/display-name
+      renderCell: (params: GridCellParams) => <LinkCell row={params.row} />,
       disableClickEventBubbling: true,
     },
     {
@@ -162,17 +168,10 @@ const ViewTasks: React.FunctionComponent<Props> = ({
       taskDescription: "ABC Company",
       compensation: 10,
       status: "Pending",
-      assignedTo: "0x...",
-      evidence: "hyperlink",
+      assignedTo: "0xfC16D162C6a9Ff85346cB42176428c26278F09D1",
+      evidence: "https://www.google.com.sg",
     },
   ];
-
-  // <ViewCandidates
-  //   open={viewCandidatesOpen}
-  //   onClose={() => setViewCandidatesOpen(false)}
-  //   taskTitle={taskTitleToView}
-  //   taskId={taskIdToView}
-  // />
 
   return (
     <React.Fragment>
@@ -184,6 +183,9 @@ const ViewTasks: React.FunctionComponent<Props> = ({
       />
       <Typography variant="h3" gutterBottom>
         Tasks for [{jobTitle}]
+      </Typography>
+      <Typography variant="subtitle1" gutterBottom>
+        Job Address: {jobAddr}
       </Typography>
       <Container
         disableGutters

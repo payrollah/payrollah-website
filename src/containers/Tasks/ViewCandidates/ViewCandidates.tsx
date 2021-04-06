@@ -18,13 +18,6 @@ import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import AssignTask from "./AssignTask/AssignTask";
 import ViewWorkerProfile from "./ViewWorkerProfile/ViewWorkerProfile";
 
-interface Props {
-  open: boolean;
-  onClose: () => void;
-  taskTitle: string;
-  taskId: number;
-}
-
 // const useStyles = makeStyles((theme) => ({
 //   buttonContainer: {
 //     display: "flex",
@@ -34,12 +27,11 @@ interface Props {
 //   },
 // }));
 
-const ViewCandidates: React.FunctionComponent<Props> = ({
-  open,
-  onClose,
-  taskTitle = "taskTitle",
-  taskId,
-}: Props) => {
+const taskTitle = "Task Title";
+
+const taskId = new URLSearchParams(window.location.search).get("task");
+
+const ViewCandidates: React.FunctionComponent = () => {
   // const classes = useStyles();
 
   interface ViewCellProps {
@@ -125,7 +117,7 @@ const ViewCandidates: React.FunctionComponent<Props> = ({
     {
       id: 1,
       workerId: 1,
-      workerAddr: "0x....",
+      workerAddr: "0xfC16D162C6a9Ff85346cB42176428c26278F09D1",
     },
   ];
 
@@ -145,6 +137,9 @@ const ViewCandidates: React.FunctionComponent<Props> = ({
       />
       <Typography variant="h3" gutterBottom>
         Candidates for [{taskTitle}]
+      </Typography>
+      <Typography variant="subtitle1" gutterBottom>
+        Task ID: {taskId}
       </Typography>
       <div style={{ height: 400, width: "100%", textAlign: "center" }}>
         <DataGrid

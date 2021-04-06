@@ -9,6 +9,7 @@ import {
   // FormLabel,
   LinearProgress,
   // Radio,
+  Typography,
 } from "@material-ui/core";
 import { Field, Form, Formik, FormikErrors, FormikValues } from "formik";
 import { TextField } from "formik-material-ui";
@@ -49,8 +50,8 @@ const CreateJob: React.FunctionComponent<Props> = ({
           setTimeout(() => {
             setSubmitting(false);
             alert(JSON.stringify(values, null, 2));
-
             // Call JobCreator contract function deployNewJob(string calldata _title, string calldata _description)
+            onClose();
           }, 500);
         }}
       >
@@ -70,6 +71,14 @@ const CreateJob: React.FunctionComponent<Props> = ({
                 name="jobDescription"
                 fullWidth
               />
+              <Typography
+                variant="caption"
+                color="error"
+                align="center"
+                gutterBottom
+              >
+                **Once created, job cannot be removed!**
+              </Typography>
               {isSubmitting && <LinearProgress />}
             </DialogContent>
             <DialogActions>

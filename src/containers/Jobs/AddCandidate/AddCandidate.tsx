@@ -5,7 +5,9 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  LinearProgress,
 } from "@material-ui/core";
+import { Form, Formik } from "formik";
 import React from "react";
 
 interface Props {
@@ -24,19 +26,42 @@ const AddCandidate: React.FunctionComponent<Props> = ({
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle id="form-dialog-title">Job Application</DialogTitle>
-      <DialogContent>
-        <DialogContentText>
-          Are you sure you want to apply for this task?
-        </DialogContentText>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose} color="secondary">
-          Yes
-        </Button>
-        <Button onClick={onClose} color="primary">
-          No
-        </Button>
-      </DialogActions>
+      <Formik
+        initialValues={{
+          taskId: taskId,
+        }}
+        onSubmit={(values, { setSubmitting }) => {
+          setTimeout(() => {
+            setSubmitting(false);
+            alert(JSON.stringify(values, null, 2));
+            // Call JobCreator contract function deployNewJob(string calldata _title, string calldata _description)
+            onClose();
+          }, 500);
+        }}
+      >
+        {({ submitForm, isSubmitting }) => (
+          <Form>
+            <DialogContent>
+              <DialogContentText>
+                Are you sure you want to apply for this task?
+              </DialogContentText>
+              {isSubmitting && <LinearProgress />}
+            </DialogContent>
+            <DialogActions>
+              <Button
+                color="secondary"
+                disabled={isSubmitting}
+                onClick={submitForm}
+              >
+                Yes
+              </Button>
+              <Button disabled={isSubmitting} onClick={onClose} color="primary">
+                No
+              </Button>
+            </DialogActions>
+          </Form>
+        )}
+      </Formik>
     </Dialog>
   );
 };

@@ -4,11 +4,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  // FormControl,
-  // FormControlLabel,
-  // FormLabel,
   LinearProgress,
-  // Radio,
 } from "@material-ui/core";
 import { Field, Form, Formik, FormikErrors, FormikValues } from "formik";
 import { TextField } from "formik-material-ui";
@@ -48,6 +44,7 @@ const SubmitTask: React.FunctionComponent<Props> = ({
             alert(JSON.stringify(values, null, 2));
 
             // Call Job contract function submitTask(taskId, evidence)
+            onClose();
           }, 500);
         }}
       >

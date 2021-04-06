@@ -8,7 +8,7 @@ import {
   // FormControlLabel,
   // FormLabel,
   LinearProgress,
-  // Radio,
+  Typography,
 } from "@material-ui/core";
 import { Field, Form, Formik, FormikErrors, FormikValues } from "formik";
 import { TextField } from "formik-material-ui";
@@ -53,6 +53,7 @@ const AddTask: React.FunctionComponent<Props> = ({ open, onClose }: Props) => {
             alert(JSON.stringify(values, null, 2));
 
             // Call Job contract function addTask(title, description, compensation)
+            onClose();
           }, 500);
         }}
       >
@@ -81,6 +82,14 @@ const AddTask: React.FunctionComponent<Props> = ({ open, onClose }: Props) => {
                 fullWidth
                 required
               />
+              <Typography
+                variant="caption"
+                color="error"
+                align="center"
+                gutterBottom
+              >
+                **Once created, task cannot be removed!**
+              </Typography>
               {isSubmitting && <LinearProgress />}
             </DialogContent>
             <DialogActions>

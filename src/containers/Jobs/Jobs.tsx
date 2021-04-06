@@ -18,7 +18,6 @@ import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import WorkIcon from "@material-ui/icons/Work";
 import CreateJob from "./CreateJob/CreateJob";
 import CompleteJob from "./CompleteJob/CompleteJob";
-// import ViewJob from "../Tasks/ViewJob";
 
 const useStyles = makeStyles((theme) => ({
   buttonContainer: {
@@ -42,10 +41,6 @@ const Jobs: React.FunctionComponent = () => {
 
   const [createJobOpen, setCreateJobOpen] = useState(false);
 
-  // const [viewJobOpen, setViewJobOpen] = useState(false);
-  // const [jobTitleToView, setJobTitleToView] = useState("");
-  // const [jobAddrToView, setJobAddrToView] = useState("");
-
   const [completeJobOpen, setCompleteJobOpen] = useState(false);
   const [jobAddrToComplete, setJobAddrToComplete] = useState("");
 
@@ -55,9 +50,7 @@ const Jobs: React.FunctionComponent = () => {
     return (
       <IconButton
         onClick={() => {
-          // setJobTitleToView(row.jobTitle);
-          // setJobAddrToView(row.jobAddr);
-          // setViewJobOpen(true);
+          window.location.href = "/tasks?job=" + row.jobAddr;
         }}
       >
         <AssignmentIcon />
@@ -71,7 +64,7 @@ const Jobs: React.FunctionComponent = () => {
     return (
       <IconButton
         onClick={() => {
-          setJobAddrToComplete(row.jobAddress);
+          setJobAddrToComplete(row.jobAddr);
           setCompleteJobOpen(true);
         }}
       >
@@ -139,20 +132,13 @@ const Jobs: React.FunctionComponent = () => {
   const rows = [
     {
       id: 1,
-      jobAddr: "0x....",
+      jobAddr: "0x91fd2CD41f02FFCA2AB15973D7AA5AF8c19D1DB9",
       jobTitle: "ABC Company",
       jobDescription: "ABC Company",
       numRemainingTasks: 2,
       status: "Created",
     },
   ];
-
-  // <ViewJob
-  //   open={viewJobOpen}
-  //   onClose={() => setViewJobOpen(false)}
-  //   jobTitle={jobTitleToView}
-  //   jobAddr={jobAddrToView}
-  // />
 
   return (
     <React.Fragment>
