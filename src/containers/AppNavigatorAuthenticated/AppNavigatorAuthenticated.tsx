@@ -3,16 +3,14 @@ import React from "react";
 import { Route, Switch } from "react-router-dom";
 import {
   EMPLOYEES,
-  CLAIMS,
-  COMPANYCLAIMS,
   JOBS,
+  VIEWTASKS,
+  VIEWCANDIDATES,
 } from "../../constants/routePaths";
 import Employees from "../Employees/Employees";
-import Claims from "../Claims/Claims";
 import Jobs from "../Jobs/Jobs";
-// import ViewJob from "../Tasks/ViewJob";
-// import ViewCandidates from "../Tasks/ViewCandidates/ViewCandidates";
-import CompanyClaims from "../Claims/CompanyClaims";
+import ViewTasks from "../Tasks/ViewTasks";
+import ViewCandidates from "../Tasks/ViewCandidates/ViewCandidates";
 import Menubar from "../Menubar/Menubar";
 import Sidebar from "../Sidebar/Sidebar";
 
@@ -31,9 +29,9 @@ const Routes: React.FunctionComponent = () => {
     <div>
       <Switch>
         <Route path={EMPLOYEES} component={Employees} />
-        <Route path={CLAIMS} component={Claims} />
         <Route path={JOBS} component={Jobs} />
-        <Route path={COMPANYCLAIMS} component={CompanyClaims} />
+        <Route path={VIEWTASKS} component={ViewTasks} />
+        <Route path={VIEWCANDIDATES} component={ViewCandidates} />
         <Route path={"/page2"}>
           <div>Page 2</div>
         </Route>

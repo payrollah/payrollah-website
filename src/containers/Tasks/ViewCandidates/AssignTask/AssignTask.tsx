@@ -11,32 +11,34 @@ import React from "react";
 interface Props {
   open: boolean;
   onClose: () => void;
-  claimId: number;
+  taskId: number;
+  workerAddr: string;
 }
 
-const CancelClaim: React.FunctionComponent<Props> = ({
+const AssignTask: React.FunctionComponent<Props> = ({
   open,
   onClose,
-  claimId,
+  taskId,
+  workerAddr,
 }: Props) => {
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle id="form-dialog-title">Cancel Claim</DialogTitle>
+      <DialogTitle id="form-dialog-title">Task Assignment</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          Are you sure you want to cancel this claim?
+          Are you sure you want to assign this person the task?
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="primary">
-          Close
-        </Button>
         <Button onClick={onClose} color="secondary">
-          Cancel
+          Yes
+        </Button>
+        <Button onClick={onClose} color="primary">
+          No
         </Button>
       </DialogActions>
     </Dialog>
   );
 };
 
-export default CancelClaim;
+export default AssignTask;

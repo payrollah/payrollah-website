@@ -11,20 +11,20 @@ import React from "react";
 interface Props {
   open: boolean;
   onClose: () => void;
-  claimId: number;
+  taskId: number;
 }
 
-const AcceptClaim: React.FunctionComponent<Props> = ({
+const ApproveTask: React.FunctionComponent<Props> = ({
   open,
   onClose,
-  claimId,
+  taskId,
 }: Props) => {
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle id="form-dialog-title">Accept Claim</DialogTitle>
+      <DialogTitle id="form-dialog-title">Task Completed</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          Are you sure you want to accept this claim?
+          Are you sure you want to approve this task?
         </DialogContentText>
       </DialogContent>
       <DialogActions>
@@ -39,4 +39,4 @@ const AcceptClaim: React.FunctionComponent<Props> = ({
   );
 };
 
-export default AcceptClaim;
+export default ApproveTask;

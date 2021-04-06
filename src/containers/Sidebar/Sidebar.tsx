@@ -14,9 +14,15 @@ import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
 import GroupIcon from "@material-ui/icons/Group";
 import ReceiptIcon from "@material-ui/icons/Receipt";
-import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
+import WorkIcon from "@material-ui/icons/Work";
 import { Link } from "react-router-dom";
-import { JOBS, EMPLOYEES, TRANSACTIONS } from "../../constants/routePaths";
+import {
+  JOBS,
+  VIEWTASKS,
+  VIEWCANDIDATES,
+  EMPLOYEES,
+  TRANSACTIONS,
+} from "../../constants/routePaths";
 
 const drawerWidth = 240;
 
@@ -65,9 +71,25 @@ const Sidebar: React.FunctionComponent = () => {
           <Link to={JOBS}>
             <ListItem button>
               <ListItemIcon>
-                <AssignmentIndIcon />
+                <WorkIcon />
               </ListItemIcon>
-              <ListItemText primary={"Jobs"} />
+              <ListItemText primary={"Jobs (Company)"} />
+            </ListItem>
+          </Link>
+          <Link to={VIEWTASKS}>
+            <ListItem button>
+              <ListItemIcon>
+                <WorkIcon />
+              </ListItemIcon>
+              <ListItemText primary={"Tasks (Company)"} />
+            </ListItem>
+          </Link>
+          <Link to={VIEWCANDIDATES}>
+            <ListItem button>
+              <ListItemIcon>
+                <WorkIcon />
+              </ListItemIcon>
+              <ListItemText primary={"Candidates (Company)"} />
             </ListItem>
           </Link>
         </List>

@@ -13,9 +13,9 @@ import {
   GridToolbar,
   GridRowModel,
 } from "@material-ui/data-grid";
-import MessageIcon from "@material-ui/icons/Message";
+import AssignmentIcon from "@material-ui/icons/Assignment";
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
-import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
+import WorkIcon from "@material-ui/icons/Work";
 import CreateJob from "./CreateJob/CreateJob";
 import CompleteJob from "./CompleteJob/CompleteJob";
 // import ViewJob from "../Tasks/ViewJob";
@@ -42,9 +42,9 @@ const Jobs: React.FunctionComponent = () => {
 
   const [createJobOpen, setCreateJobOpen] = useState(false);
 
-  const [viewJobOpen, setViewJobOpen] = useState(false);
-  const [jobTitleToView, setJobTitleToView] = useState("");
-  const [jobAddrToView, setJobAddrToView] = useState("");
+  // const [viewJobOpen, setViewJobOpen] = useState(false);
+  // const [jobTitleToView, setJobTitleToView] = useState("");
+  // const [jobAddrToView, setJobAddrToView] = useState("");
 
   const [completeJobOpen, setCompleteJobOpen] = useState(false);
   const [jobAddrToComplete, setJobAddrToComplete] = useState("");
@@ -55,12 +55,12 @@ const Jobs: React.FunctionComponent = () => {
     return (
       <IconButton
         onClick={() => {
-          setJobTitleToView(row.jobTitle);
-          setJobAddrToView(row.jobAddr);
-          setViewJobOpen(true);
+          // setJobTitleToView(row.jobTitle);
+          // setJobAddrToView(row.jobAddr);
+          // setViewJobOpen(true);
         }}
       >
-        <MessageIcon />
+        <AssignmentIcon />
       </IconButton>
     );
   };
@@ -174,7 +174,7 @@ const Jobs: React.FunctionComponent = () => {
         <Button
           variant="contained"
           color="primary"
-          endIcon={<AssignmentIndIcon />}
+          endIcon={<WorkIcon />}
           onClick={() => setCreateJobOpen(true)}
         >
           New Job
