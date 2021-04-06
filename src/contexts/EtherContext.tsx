@@ -14,8 +14,6 @@ interface EtherProvider {
   setSigner: (value: any) => void;
   companyContract?: Company;
   setCompanyContract: (value: any) => void;
-  jobContract?: ethers.Contract;
-  setJobContract: (value: any) => void;
   jobCreatorContract?: JobCreator;
   setJobCreatorContract: (value: any) => void;
   taskContract?: Task;
@@ -34,9 +32,6 @@ const EtherContext = React.createContext<EtherProvider>({
     return;
   },
   setCompanyContract: (value: any) => {
-    return;
-  },
-  setJobContract: (value: any) => {
     return;
   },
   setJobCreatorContract: (value: any) => {
