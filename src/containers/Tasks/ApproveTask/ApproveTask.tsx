@@ -14,6 +14,8 @@ interface Props {
   taskId: number;
 }
 
+// Call Job contract function approveTask(taskId)
+
 const ApproveTask: React.FunctionComponent<Props> = ({
   open,
   onClose,

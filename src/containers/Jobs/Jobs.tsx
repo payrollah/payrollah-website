@@ -143,7 +143,7 @@ const Jobs: React.FunctionComponent = () => {
       jobTitle: "ABC Company",
       jobDescription: "ABC Company",
       numRemainingTasks: 2,
-      status: "Pending",
+      status: "Created",
     },
   ];
 

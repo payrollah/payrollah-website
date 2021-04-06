@@ -14,6 +14,8 @@ interface Props {
   jobAddr: string;
 }
 
+// Call Job contract function completeJob()
+
 const CompleteJob: React.FunctionComponent<Props> = ({
   open,
   onClose,

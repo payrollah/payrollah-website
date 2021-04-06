@@ -52,7 +52,7 @@ const AddTask: React.FunctionComponent<Props> = ({ open, onClose }: Props) => {
             setSubmitting(false);
             alert(JSON.stringify(values, null, 2));
 
-            // Call Job contract function addTaks(title, description, compensation)
+            // Call Job contract function addTask(title, description, compensation)
           }, 500);
         }}
       >

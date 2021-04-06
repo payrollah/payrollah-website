@@ -14,6 +14,7 @@ interface Props {
   taskId: number;
   workerAddr: string;
 }
+// Call Job contract function assignTask(taskId, assignTo)
 
 const AssignTask: React.FunctionComponent<Props> = ({
   open,
