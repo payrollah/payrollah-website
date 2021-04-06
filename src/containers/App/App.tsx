@@ -54,7 +54,6 @@ const App: React.FunctionComponent = () => {
     setEtherSigner,
   ] = useState<ethers.providers.JsonRpcSigner>();
   const [companyContract, setCompanyContract] = useState<Company>();
-  const [jobContract, setJobContract] = useState<ethers.Contract>();
   const [jobCreatorContract, setJobCreatorContract] = useState<JobCreator>();
   const [taskContract, setTaskContract] = useState<Task>();
   const [workerContract, setWorkerContract] = useState<Worker>();
@@ -86,6 +85,14 @@ const App: React.FunctionComponent = () => {
         provider
       );
       setJobCreatorContract(jobCreatorContract);
+
+      // const transferLogFilter = jobCreatorContract.filters.JobDeployed(
+      //   null,
+      //   "0x9E05Aa244F582caE032DE2271C81067846818a55"
+      // );
+      // jobCreatorContract
+      //   .queryFilter(transferLogFilter, 0)
+      //   .then(console.log);
     }
   }, []);
 
@@ -99,8 +106,6 @@ const App: React.FunctionComponent = () => {
           setSigner: setEtherSigner,
           companyContract,
           setCompanyContract,
-          jobContract,
-          setJobContract,
           jobCreatorContract,
           setJobCreatorContract,
           taskContract,
