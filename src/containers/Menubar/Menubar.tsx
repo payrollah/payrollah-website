@@ -8,6 +8,18 @@ import {
 import React, { useContext, useState } from "react";
 import MetaMaskOnboarding from "@metamask/onboarding";
 import EtherContext from "../../contexts/EtherContext";
+import {
+  Company__factory,
+  JobCreator__factory,
+  Task__factory,
+  Worker__factory,
+} from "@payrollah/payrollah-registry";
+import {
+  COMPANY_CONTRACT_ADDR,
+  JOB_CREATOR_CONTRACT_ADDR,
+  TASK_CONTRACT_ADDR,
+  WORKER_CONTRACT_ADDR,
+} from "../../constants/contracts";
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -32,15 +44,43 @@ const onClickInstall = () => {
 const Menubar: React.FunctionComponent = () => {
   const classes = useStyles();
 
-  const { provider, signer, setSigner } = useContext(EtherContext);
+  const {
+    provider,
+    signer,
+    setSigner,
+    setCompanyContract,
+    setWorkerContract,
+    setJobCreatorContract,
+    setTaskContract,
+  } = useContext(EtherContext);
   const [address, setAddress] = useState("");
 
   const onClickConnect = () => {
     if (!!provider) {
       const signer = provider.getSigner();
       setSigner(signer);
-      console.log(signer);
-      console.log("logged");
+
+      // replace readonly contracts with write-allowed contracts
+      const companyContract = Company__factory.connect(
+        COMPANY_CONTRACT_ADDR,
+        signer
+      );
+      setCompanyContract(companyContract);
+
+      const workerContract = Worker__factory.connect(
+        WORKER_CONTRACT_ADDR,
+        signer
+      );
+      setWorkerContract(workerContract);
+
+      const taskContract = Task__factory.connect(TASK_CONTRACT_ADDR, signer);
+      setTaskContract(taskContract);
+
+      const jobCreatorContract = JobCreator__factory.connect(
+        JOB_CREATOR_CONTRACT_ADDR,
+        signer
+      );
+      setJobCreatorContract(jobCreatorContract);
     }
   };
 

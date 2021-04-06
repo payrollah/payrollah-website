@@ -7,9 +7,24 @@ import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 import MomentUtils from "@date-io/moment";
 import EtherContext from "../../contexts/EtherContext";
 import { ethers } from "ethers";
-// import CompanyAbi from "../../contracts/Company";
-import { COMPANY_CONTRACT_ADDR } from "../../constants/contracts";
-import { Company__factory } from "@payrollah/payrollah-registry/dist/ts";
+import {
+  COMPANY_CONTRACT_ADDR,
+  JOB_CREATOR_CONTRACT_ADDR,
+  TASK_CONTRACT_ADDR,
+  WORKER_CONTRACT_ADDR,
+} from "../../constants/contracts";
+import {
+  Company__factory,
+  JobCreator__factory,
+  Task__factory,
+  Worker__factory,
+} from "@payrollah/payrollah-registry";
+import {
+  Company,
+  JobCreator,
+  Task,
+  Worker,
+} from "@payrollah/payrollah-registry/dist/ts/contracts";
 
 const theme = createMuiTheme({
   overrides: {
@@ -37,14 +52,11 @@ const App: React.FunctionComponent = () => {
     etherSigner,
     setEtherSigner,
   ] = useState<ethers.providers.JsonRpcSigner>();
-  const [companyContract, setCompanyContract] = useState<ethers.Contract>();
+  const [companyContract, setCompanyContract] = useState<Company>();
   const [jobContract, setJobContract] = useState<ethers.Contract>();
-  const [
-    jobCreatorContract,
-    setJobCreatorContract,
-  ] = useState<ethers.Contract>();
-  const [taskContract, setTaskContract] = useState<ethers.Contract>();
-  const [workerContract, setWorkerContract] = useState<ethers.Contract>();
+  const [jobCreatorContract, setJobCreatorContract] = useState<JobCreator>();
+  const [taskContract, setTaskContract] = useState<Task>();
+  const [workerContract, setWorkerContract] = useState<Worker>();
 
   useEffect(() => {
     const { ethereum } = window as any;
@@ -57,6 +69,21 @@ const App: React.FunctionComponent = () => {
       provider
     );
     setCompanyContract(companyContract);
+
+    const workerContract = Worker__factory.connect(
+      WORKER_CONTRACT_ADDR,
+      provider
+    );
+    setWorkerContract(workerContract);
+
+    const taskContract = Task__factory.connect(TASK_CONTRACT_ADDR, provider);
+    setTaskContract(taskContract);
+
+    const jobCreatorContract = JobCreator__factory.connect(
+      JOB_CREATOR_CONTRACT_ADDR,
+      provider
+    );
+    setJobCreatorContract(jobCreatorContract);
   }, []);
 
   return (

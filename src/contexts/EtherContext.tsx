@@ -1,3 +1,9 @@
+import {
+  Company,
+  JobCreator,
+  Task,
+  Worker,
+} from "@payrollah/payrollah-registry/dist/ts/contracts";
 import { ethers } from "ethers";
 import React from "react";
 
@@ -6,15 +12,15 @@ interface EtherProvider {
   signer: ethers.providers.JsonRpcSigner | undefined;
   setProvider: (value: any) => void;
   setSigner: (value: any) => void;
-  companyContract?: ethers.Contract;
+  companyContract?: Company;
   setCompanyContract: (value: any) => void;
   jobContract?: ethers.Contract;
   setJobContract: (value: any) => void;
-  jobCreatorContract?: ethers.Contract;
+  jobCreatorContract?: JobCreator;
   setJobCreatorContract: (value: any) => void;
-  taskContract?: ethers.Contract;
+  taskContract?: Task;
   setTaskContract: (value: any) => void;
-  workerContract?: ethers.Contract;
+  workerContract?: Worker;
   setWorkerContract: (value: any) => void;
 }
 

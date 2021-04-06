@@ -9,7 +9,7 @@
     "@material-ui/icons": "^4.11.2",
     "@material-ui/pickers": "^3.3.10",
     "@metamask/onboarding": "^1.0.0",
-    "@payrollah/payrollah-registry": "^1.6.1",
+    "@payrollah/payrollah-registry": "^1.6.2",
     "ethers": "^5.0.32",
     "formik": "^2.2.6",
     "formik-material-ui": "^3.0.1",

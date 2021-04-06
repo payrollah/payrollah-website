@@ -52,7 +52,7 @@ const Employees: React.FunctionComponent = () => {
     companyContract
       ?.numCompanies()
       .then((value: BigNumber) => console.log(value.toNumber()));
-  }, []);
+  }, [companyContract]);
 
   const [createEmployeeOpen, setCreateEmployeeOpen] = useState(false);
   const [editEmployeeOpen, setEditEmployeeOpen] = useState(false);
