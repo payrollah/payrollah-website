@@ -1,9 +1,17 @@
 import { makeStyles, Toolbar } from "@material-ui/core";
 import React from "react";
 import { Route, Switch } from "react-router-dom";
-import { EMPLOYEES, CLAIMS, COMPANYCLAIMS } from "../../constants/routePaths";
+import {
+  EMPLOYEES,
+  CLAIMS,
+  COMPANYCLAIMS,
+  JOBS,
+} from "../../constants/routePaths";
 import Employees from "../Employees/Employees";
 import Claims from "../Claims/Claims";
+import Jobs from "../Jobs/Jobs";
+// import ViewJob from "../Tasks/ViewJob";
+// import ViewCandidates from "../Tasks/ViewCandidates/ViewCandidates";
 import CompanyClaims from "../Claims/CompanyClaims";
 import Menubar from "../Menubar/Menubar";
 import Sidebar from "../Sidebar/Sidebar";
@@ -24,6 +32,7 @@ const Routes: React.FunctionComponent = () => {
       <Switch>
         <Route path={EMPLOYEES} component={Employees} />
         <Route path={CLAIMS} component={Claims} />
+        <Route path={JOBS} component={Jobs} />
         <Route path={COMPANYCLAIMS} component={CompanyClaims} />
         <Route path={"/page2"}>
           <div>Page 2</div>

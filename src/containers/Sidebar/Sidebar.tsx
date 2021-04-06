@@ -16,12 +16,7 @@ import GroupIcon from "@material-ui/icons/Group";
 import ReceiptIcon from "@material-ui/icons/Receipt";
 import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
 import { Link } from "react-router-dom";
-import {
-  CLAIMS,
-  COMPANYCLAIMS,
-  EMPLOYEES,
-  TRANSACTIONS,
-} from "../../constants/routePaths";
+import { JOBS, EMPLOYEES, TRANSACTIONS } from "../../constants/routePaths";
 
 const drawerWidth = 240;
 
@@ -67,20 +62,12 @@ const Sidebar: React.FunctionComponent = () => {
               <ListItemText primary={"Transactions"} />
             </ListItem>
           </Link>
-          <Link to={CLAIMS}>
+          <Link to={JOBS}>
             <ListItem button>
               <ListItemIcon>
                 <AssignmentIndIcon />
               </ListItemIcon>
-              <ListItemText primary={"Claims (Employee)"} />
-            </ListItem>
-          </Link>
-          <Link to={COMPANYCLAIMS}>
-            <ListItem button>
-              <ListItemIcon>
-                <AssignmentIndIcon />
-              </ListItemIcon>
-              <ListItemText primary={"Claims (Company)"} />
+              <ListItemText primary={"Jobs"} />
             </ListItem>
           </Link>
         </List>
