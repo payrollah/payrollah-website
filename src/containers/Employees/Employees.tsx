@@ -5,7 +5,7 @@ import {
   makeStyles,
   Typography,
 } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   DataGrid,
   GridCellParams,
@@ -24,6 +24,8 @@ import {
   PART_TIME,
 } from "../../constants/salary";
 import RemoveEmployee from "./RemoveEmployee/RemoveEmployee";
+import EtherContext from "../../contexts/EtherContext";
+import { BigNumber } from "@ethersproject/bignumber";
 
 const useStyles = makeStyles((theme) => ({
   buttonContainer: {
@@ -44,6 +46,13 @@ interface DeleteCellProps {
 
 const Employees: React.FunctionComponent = () => {
   const classes = useStyles();
+  const { companyContract } = useContext(EtherContext);
+
+  useEffect(() => {
+    companyContract
+      ?.numCompanies()
+      .then((value: BigNumber) => console.log(value.toNumber()));
+  }, [companyContract]);
 
   const [createEmployeeOpen, setCreateEmployeeOpen] = useState(false);
   const [editEmployeeOpen, setEditEmployeeOpen] = useState(false);
