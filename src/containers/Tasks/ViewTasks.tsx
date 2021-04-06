@@ -94,7 +94,7 @@ const ViewTasks: React.FunctionComponent<Props> = ({
 
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 70, hide: true },
-    { field: "taskId", headerName: "taskI", width: 70, hide: true },
+    { field: "taskId", headerName: "taskId", width: 70, hide: true },
     {
       field: "taskTitle",
       headerName: "Task Title",

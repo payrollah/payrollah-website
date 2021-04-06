@@ -5,3 +5,5 @@ export const COMPANYCLAIMS = "/companyClaims";
 export const JOBS = "/jobs";
 export const VIEWTASKS = "/tasks";
 export const VIEWCANDIDATES = "/candidates";
+export const JOBLIST = "/joblist";
+export const TASKLIST = "/tasklist";

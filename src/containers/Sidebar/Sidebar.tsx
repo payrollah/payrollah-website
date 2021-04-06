@@ -15,11 +15,14 @@ import MailIcon from "@material-ui/icons/Mail";
 import GroupIcon from "@material-ui/icons/Group";
 import ReceiptIcon from "@material-ui/icons/Receipt";
 import WorkIcon from "@material-ui/icons/Work";
+import AssignmentIcon from "@material-ui/icons/Assignment";
 import { Link } from "react-router-dom";
 import {
   JOBS,
   VIEWTASKS,
   VIEWCANDIDATES,
+  JOBLIST,
+  TASKLIST,
   EMPLOYEES,
   TRANSACTIONS,
 } from "../../constants/routePaths";
@@ -79,7 +82,7 @@ const Sidebar: React.FunctionComponent = () => {
           <Link to={VIEWTASKS}>
             <ListItem button>
               <ListItemIcon>
-                <WorkIcon />
+                <AssignmentIcon />
               </ListItemIcon>
               <ListItemText primary={"Tasks (Company)"} />
             </ListItem>
@@ -90,6 +93,22 @@ const Sidebar: React.FunctionComponent = () => {
                 <WorkIcon />
               </ListItemIcon>
               <ListItemText primary={"Candidates (Company)"} />
+            </ListItem>
+          </Link>
+          <Link to={JOBLIST}>
+            <ListItem button>
+              <ListItemIcon>
+                <WorkIcon />
+              </ListItemIcon>
+              <ListItemText primary={"Jobs (Worker)"} />
+            </ListItem>
+          </Link>
+          <Link to={TASKLIST}>
+            <ListItem button>
+              <ListItemIcon>
+                <AssignmentIcon />
+              </ListItemIcon>
+              <ListItemText primary={"Tasks (Worker)"} />
             </ListItem>
           </Link>
         </List>
