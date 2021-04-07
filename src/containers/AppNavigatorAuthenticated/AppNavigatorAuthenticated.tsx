@@ -8,6 +8,8 @@ import {
   VIEWCANDIDATES,
   JOBLIST,
   TASKLIST,
+  COMPANYPROFILE,
+  WORKERPROFILE,
 } from "../../constants/routePaths";
 import Employees from "../Employees/Employees";
 import Jobs from "../Jobs/Jobs";
@@ -15,6 +17,8 @@ import ViewTasks from "../Tasks/ViewTasks";
 import ViewCandidates from "../Tasks/ViewCandidates/ViewCandidates";
 import JobList from "../Jobs/JobList";
 import TaskList from "../Tasks/TaskList";
+import CompanyProfile from "../Profile/CompanyProfile";
+import WorkerProfile from "../Profile/WorkerProfile";
 import Menubar from "../Menubar/Menubar";
 import Sidebar from "../Sidebar/Sidebar";
 
@@ -38,6 +42,8 @@ const Routes: React.FunctionComponent = () => {
         <Route path={VIEWCANDIDATES} component={ViewCandidates} />
         <Route path={JOBLIST} component={JobList} />
         <Route path={TASKLIST} component={TaskList} />
+        <Route path={COMPANYPROFILE} component={CompanyProfile} />
+        <Route path={WORKERPROFILE} component={WorkerProfile} />
         <Route path={"/page2"}>
           <div>Page 2</div>
         </Route>
