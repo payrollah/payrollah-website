@@ -26,6 +26,7 @@ import {
   Worker,
 } from "@payrollah/payrollah-registry/dist/ts/contracts";
 import MetaMaskOnboarding from "@metamask/onboarding";
+import UserContext from "../../contexts/UserContext";
 
 const theme = createMuiTheme({
   overrides: {
@@ -57,6 +58,12 @@ const App: React.FunctionComponent = () => {
   const [jobCreatorContract, setJobCreatorContract] = useState<JobCreator>();
   const [taskContract, setTaskContract] = useState<Task>();
   const [workerContract, setWorkerContract] = useState<Worker>();
+
+  const [name, setName] = useState("");
+  const [isCompany, setIsCompany] = useState(false);
+  const [companyId, setCompanyId] = useState<number>();
+  const [workerId, setWorkerId] = useState<number>();
+  const [address, setAddress] = useState("");
 
   useEffect(() => {
     const { ethereum } = window as any;
@@ -114,13 +121,28 @@ const App: React.FunctionComponent = () => {
           setWorkerContract,
         }}
       >
-        <ThemeProvider theme={theme}>
-          <BrowserRouter>
-            <MuiPickersUtilsProvider utils={MomentUtils}>
-              <AppNavigatorAuthenticated />
-            </MuiPickersUtilsProvider>
-          </BrowserRouter>
-        </ThemeProvider>
+        <UserContext.Provider
+          value={{
+            name,
+            isCompany,
+            companyId,
+            workerId,
+            address,
+            setName,
+            setIsCompany,
+            setCompanyId,
+            setWorkerId,
+            setAddress,
+          }}
+        >
+          <ThemeProvider theme={theme}>
+            <BrowserRouter>
+              <MuiPickersUtilsProvider utils={MomentUtils}>
+                <AppNavigatorAuthenticated />
+              </MuiPickersUtilsProvider>
+            </BrowserRouter>
+          </ThemeProvider>
+        </UserContext.Provider>
       </EtherContext.Provider>
     </div>
   );
