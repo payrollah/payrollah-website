@@ -9,7 +9,6 @@ import {
   FormControlLabel,
   Link,
   Switch,
-  Typography,
 } from "@material-ui/core";
 import {
   Company__factory,

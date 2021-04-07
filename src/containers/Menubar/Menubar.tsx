@@ -8,6 +8,7 @@ import {
 import React, { useContext, useState } from "react";
 import LoginModal from "./LoginModal/LoginModal";
 import UserContext from "../../contexts/UserContext";
+import RegisterModal from "./RegisterModal/RegisterModal";
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -15,6 +16,11 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
+  },
+  buttonContainer: {
+    "& > *": {
+      margin: theme.spacing(1),
+    },
   },
 }));
 
@@ -24,13 +30,21 @@ const Menubar: React.FunctionComponent = () => {
   const { address } = useContext(UserContext);
 
   const [loginOpen, setLoginOpen] = useState(false);
+  const [registerOpen, setRegisterOpen] = useState(false);
 
   return (
     <AppBar position="fixed" className={classes.appBar}>
       <LoginModal
         open={loginOpen}
         onClose={() => setLoginOpen(false)}
-        onClickSignUp={console.log}
+        onClickSignUp={() => {
+          setLoginOpen(false);
+          setRegisterOpen(true);
+        }}
+      />
+      <RegisterModal
+        open={registerOpen}
+        onClose={() => setRegisterOpen(false)}
       />
       <Toolbar>
         <Typography variant="h6" noWrap className={classes.title}>
@@ -38,12 +52,20 @@ const Menubar: React.FunctionComponent = () => {
         </Typography>
         <div>
           {!address.length ? (
-            <Button
-              variant="contained"
-              onClick={() => setLoginOpen(!loginOpen)}
-            >
-              Login
-            </Button>
+            <div className={classes.buttonContainer}>
+              <Button
+                variant="contained"
+                onClick={() => setLoginOpen(!loginOpen)}
+              >
+                Login
+              </Button>
+              <Button
+                variant="contained"
+                onClick={() => setRegisterOpen(!registerOpen)}
+              >
+                Sign Up
+              </Button>
+            </div>
           ) : (
             <div>{address}</div>
           )}

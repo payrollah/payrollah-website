@@ -1,6 +1,6 @@
 import React from "react";
 
-interface UserContext {
+interface UserProvider {
   name: string;
   isCompany: boolean;
   companyId?: number;
@@ -13,7 +13,7 @@ interface UserContext {
   setWorkerId: (value: number) => void;
 }
 
-const UserContext = React.createContext<UserContext>({
+const UserContext = React.createContext<UserProvider>({
   name: "",
   isCompany: false,
   address: "",
