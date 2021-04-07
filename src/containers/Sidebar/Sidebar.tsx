@@ -20,8 +20,6 @@ import AccountBoxIcon from "@material-ui/icons/AccountBox";
 import { Link } from "react-router-dom";
 import {
   JOBS,
-  VIEWTASKS,
-  VIEWCANDIDATES,
   JOBLIST,
   TASKLIST,
   COMPANYPROFILE,
@@ -82,28 +80,12 @@ const Sidebar: React.FunctionComponent = () => {
               <ListItemText primary={"Jobs (Company)"} />
             </ListItem>
           </Link>
-          <Link to={VIEWTASKS}>
-            <ListItem button>
-              <ListItemIcon>
-                <AssignmentIcon />
-              </ListItemIcon>
-              <ListItemText primary={"Tasks (Company)"} />
-            </ListItem>
-          </Link>
-          <Link to={VIEWCANDIDATES}>
-            <ListItem button>
-              <ListItemIcon>
-                <WorkIcon />
-              </ListItemIcon>
-              <ListItemText primary={"Candidates (Company)"} />
-            </ListItem>
-          </Link>
           <Link to={JOBLIST}>
             <ListItem button>
               <ListItemIcon>
                 <WorkIcon />
               </ListItemIcon>
-              <ListItemText primary={"Jobs (Worker)"} />
+              <ListItemText primary={"All Jobs (Worker)"} />
             </ListItem>
           </Link>
           <Link to={TASKLIST}>

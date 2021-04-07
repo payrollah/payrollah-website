@@ -20,6 +20,7 @@ import {
   TASK_CONTRACT_ADDR,
   WORKER_CONTRACT_ADDR,
 } from "../../constants/contracts";
+import MoodIcon from "@material-ui/icons/Mood";
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -89,6 +90,7 @@ const Menubar: React.FunctionComponent = () => {
   return (
     <AppBar position="fixed" className={classes.appBar}>
       <Toolbar>
+        <MoodIcon style={{ paddingRight: "8px", height: 30, width: 30 }} />
         <Typography variant="h6" noWrap className={classes.title}>
           Payrollah
         </Typography>
