@@ -62,6 +62,7 @@ const LoginModal: React.FunctionComponent<Props> = ({
       setLoading(true);
       setError(false);
 
+      await (window as any).ethereum.send("eth_requestAccounts");
       const signer = provider.getSigner();
       setSigner(signer);
 

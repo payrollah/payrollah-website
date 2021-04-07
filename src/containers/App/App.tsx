@@ -68,7 +68,6 @@ const App: React.FunctionComponent = () => {
   useEffect(() => {
     const { ethereum } = window as any;
     if (MetaMaskOnboarding.isMetaMaskInstalled()) {
-      ethereum.send("eth_requestAccounts");
       const provider = new ethers.providers.Web3Provider(ethereum);
       setEtherProvider(provider);
 
@@ -97,9 +96,7 @@ const App: React.FunctionComponent = () => {
       //   null,
       //   "0x9E05Aa244F582caE032DE2271C81067846818a55"
       // );
-      // jobCreatorContract
-      //   .queryFilter(transferLogFilter, 0)
-      //   .then(console.log);
+      // jobCreatorContract.queryFilter(transferLogFilter, 0).then(console.log);
     }
   }, []);
 

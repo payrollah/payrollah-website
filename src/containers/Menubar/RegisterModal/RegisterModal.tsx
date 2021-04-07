@@ -75,6 +75,7 @@ const RegisterModal: React.FunctionComponent<Props> = ({
         }}
         onSubmit={async (values) => {
           if (!!provider) {
+            await (window as any).ethereum.send("eth_requestAccounts");
             const signer = provider.getSigner();
             setSigner(signer);
 
