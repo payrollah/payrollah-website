@@ -8,12 +8,14 @@ import {
   VIEWCANDIDATES,
   JOBLIST,
   TASKLIST,
+  VERIFY_DOCS,
 } from "../../constants/routePaths";
 import Employees from "../Employees/Employees";
 import Jobs from "../Jobs/Jobs";
 import ViewTasks from "../Tasks/ViewTasks";
 import ViewCandidates from "../Tasks/ViewCandidates/ViewCandidates";
 import JobList from "../Jobs/JobList";
+import VerifyDocumentation from "../Verify/VerifyDocumentation";
 import TaskList from "../Tasks/TaskList";
 import Menubar from "../Menubar/Menubar";
 import Sidebar from "../Sidebar/Sidebar";
@@ -38,6 +40,7 @@ const Routes: React.FunctionComponent = () => {
         <Route path={VIEWCANDIDATES} component={ViewCandidates} />
         <Route path={JOBLIST} component={JobList} />
         <Route path={TASKLIST} component={TaskList} />
+        <Route path={VERIFY_DOCS} component={VerifyDocumentation} />
         <Route path={"/page2"}>
           <div>Page 2</div>
         </Route>
