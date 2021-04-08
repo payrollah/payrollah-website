@@ -10,16 +10,25 @@ import {
   LinearProgress,
   Typography,
 } from "@material-ui/core";
+import { Job__factory } from "@payrollah/payrollah-registry";
 import { Field, Form, Formik, FormikErrors, FormikValues } from "formik";
 import { TextField } from "formik-material-ui";
-import React from "react";
+import React, { useContext } from "react";
+import EtherContext from "../../../contexts/EtherContext";
 
 interface Props {
   open: boolean;
   onClose: () => void;
+  jobAddr: string;
 }
 
-const AddTask: React.FunctionComponent<Props> = ({ open, onClose }: Props) => {
+const AddTask: React.FunctionComponent<Props> = ({
+  open,
+  onClose,
+  jobAddr,
+}: Props) => {
+  const { signer } = useContext(EtherContext);
+
   return (
     <Dialog open={open} onClose={onClose} fullWidth>
       <DialogTitle>New Task</DialogTitle>
@@ -47,14 +56,20 @@ const AddTask: React.FunctionComponent<Props> = ({ open, onClose }: Props) => {
 
           return errors;
         }}
-        onSubmit={(values, { setSubmitting }) => {
-          setTimeout(() => {
-            setSubmitting(false);
-            alert(JSON.stringify(values, null, 2));
-
-            // Call Job contract function addTask(title, description, compensation)
-            onClose();
-          }, 500);
+        onSubmit={async (values) => {
+          if (signer) {
+            try {
+              const jobContract = Job__factory.connect(jobAddr, signer);
+              await jobContract.addTask(
+                values.taskTitle,
+                values.taskDescription,
+                values.compensation
+              );
+              onClose();
+            } catch (e) {
+              console.error(e);
+            }
+          }
         }}
       >
         {({ submitForm, isSubmitting }) => (
