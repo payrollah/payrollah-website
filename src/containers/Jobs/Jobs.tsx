@@ -5,7 +5,7 @@ import {
   makeStyles,
   Typography,
 } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   DataGrid,
   GridCellParams,
@@ -18,6 +18,10 @@ import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import WorkIcon from "@material-ui/icons/Work";
 import CreateJob from "./CreateJob/CreateJob";
 import CompleteJob from "./CompleteJob/CompleteJob";
+import EtherContext from "../../contexts/EtherContext";
+import UserContext from "../../contexts/UserContext";
+import { Job__factory } from "@payrollah/payrollah-registry";
+import { Job } from "@payrollah/payrollah-registry/dist/ts/contracts";
 
 const useStyles = makeStyles((theme) => ({
   buttonContainer: {
@@ -43,6 +47,50 @@ const Jobs: React.FunctionComponent = () => {
 
   const [completeJobOpen, setCompleteJobOpen] = useState(false);
   const [jobAddrToComplete, setJobAddrToComplete] = useState("");
+
+  const [rows, setRows] = useState<GridRowModel[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const { jobCreatorContract, signer } = useContext(EtherContext);
+  const { address } = useContext(UserContext);
+
+  const getJobData = async (address: string, contract: Job) => {
+    return {
+      id: address,
+      jobAddr: address,
+      jobTitle: await contract.title(),
+      jobDescription: await contract.description(),
+      status: await contract.status(),
+    };
+  };
+
+  const getJobList = () => {
+    setLoading(true);
+    if (jobCreatorContract && signer) {
+      const transferLogFilter = jobCreatorContract.filters.JobDeployed(
+        null,
+        address
+      );
+      jobCreatorContract
+        .queryFilter(transferLogFilter, 0)
+        .then(async (eventList) => {
+          setRows(
+            await Promise.all(
+              eventList.map((event) => {
+                const address = event.args.jobAddress;
+                const contract = Job__factory.connect(address, signer);
+                return getJobData(address, contract);
+              })
+            )
+          );
+        });
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    getJobList();
+  }, []);
 
   const ViewCell: React.FunctionComponent<ViewCellProps> = ({
     row,
@@ -129,17 +177,6 @@ const Jobs: React.FunctionComponent = () => {
     },
   ];
 
-  const rows = [
-    {
-      id: 1,
-      jobAddr: "0x91fd2CD41f02FFCA2AB15973D7AA5AF8c19D1DB9",
-      jobTitle: "ABC Company",
-      jobDescription: "ABC Company",
-      numRemainingTasks: 2,
-      status: "Created",
-    },
-  ];
-
   return (
     <React.Fragment>
       <CreateJob open={createJobOpen} onClose={() => setCreateJobOpen(false)} />
@@ -174,6 +211,7 @@ const Jobs: React.FunctionComponent = () => {
           components={{
             Toolbar: GridToolbar,
           }}
+          loading={loading}
         />
       </div>
     </React.Fragment>
