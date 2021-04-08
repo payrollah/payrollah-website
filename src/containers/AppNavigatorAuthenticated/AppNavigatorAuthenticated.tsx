@@ -9,6 +9,8 @@ import {
   TASKLIST,
   VERIFY_DOCS,
   ROOT,
+  COMPANYPROFILE,
+  WORKERPROFILE,
 } from "../../constants/routePaths";
 import Jobs from "../Jobs/Jobs";
 import ViewTasks from "../Tasks/ViewTasks";
@@ -16,6 +18,8 @@ import ViewCandidates from "../Tasks/ViewCandidates/ViewCandidates";
 import JobList from "../Jobs/JobList";
 import VerifyDocumentation from "../Verify/VerifyDocumentation";
 import TaskList from "../Tasks/TaskList";
+import CompanyProfile from "../Profile/CompanyProfile";
+import WorkerProfile from "../Profile/WorkerProfile";
 import Menubar from "../Menubar/Menubar";
 import Sidebar from "../Sidebar/Sidebar";
 import UserContext from "../../contexts/UserContext";
@@ -39,6 +43,8 @@ const EmployeeRoutes: React.FunctionComponent = () => {
         <Route path={JOBLIST} component={JobList} />
         <Route path={TASKLIST} component={TaskList} />
         <Route path={VERIFY_DOCS} component={VerifyDocumentation} />
+        <Route path={COMPANYPROFILE} component={CompanyProfile} />
+        <Route path={WORKERPROFILE} component={WorkerProfile} />
         <Route path={ROOT} component={Home} />
       </Switch>
     </div>
@@ -54,6 +60,10 @@ const CompanyRoutes: React.FunctionComponent = () => {
         <Route path={VIEWTASKS} component={ViewTasks} />
         <Route path={VIEWCANDIDATES} component={ViewCandidates} />
         <Route path={VERIFY_DOCS} component={VerifyDocumentation} />
+        <Route path={JOBLIST} component={JobList} />
+        <Route path={TASKLIST} component={TaskList} />
+        <Route path={COMPANYPROFILE} component={CompanyProfile} />
+        <Route path={WORKERPROFILE} component={WorkerProfile} />
         <Route path={ROOT} component={Home} />
       </Switch>
     </div>

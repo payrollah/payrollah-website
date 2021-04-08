@@ -52,6 +52,7 @@ const CreateJob: React.FunctionComponent<Props> = ({
             alert(JSON.stringify(values, null, 2));
             // Call JobCreator contract function deployNewJob(string calldata _title, string calldata _description)
             onClose();
+            window.location.href = "/jobs";
           }, 500);
         }}
       >

@@ -16,6 +16,8 @@ import {
 import PeopleIcon from "@material-ui/icons/People";
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import AssignmentIcon from "@material-ui/icons/Assignment";
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import WorkIcon from "@material-ui/icons/Work";
 import GetAppIcon from "@material-ui/icons/GetApp";
 import AddTask from "./AddTask/AddTask";
 import ApproveTask from "./ApproveTask/ApproveTask";
@@ -59,7 +61,8 @@ const ViewTasks: React.FunctionComponent = () => {
     return (
       <IconButton
         onClick={() => {
-          window.location.href = "/candidates?task=" + row.taskId;
+          window.location.href =
+            "/candidates?job=" + jobAddr + "&task=" + row.taskId;
         }}
       >
         <PeopleIcon />
@@ -181,9 +184,25 @@ const ViewTasks: React.FunctionComponent = () => {
         onClose={() => setApproveTaskOpen(false)}
         taskId={taskIdToApprove}
       />
-      <Typography variant="h3" gutterBottom>
-        Tasks for [{jobTitle}]
-      </Typography>
+      <Container
+        disableGutters
+        maxWidth={false}
+        className={classes.buttonContainer}
+      >
+        <Typography variant="h3" gutterBottom style={{ width: "100%" }}>
+          Tasks for [{jobTitle}]
+        </Typography>
+        <Button
+          style={{ height: 40, width: 230 }}
+          variant="outlined"
+          color="primary"
+          endIcon={<WorkIcon />}
+          startIcon={<ArrowBackIcon />}
+          onClick={() => (window.location.href = "/jobs")}
+        >
+          Back to Jobs
+        </Button>
+      </Container>
       <Typography variant="subtitle1" gutterBottom>
         Job Address: {jobAddr}
       </Typography>

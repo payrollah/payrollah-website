@@ -12,13 +12,16 @@ import "./Sidebar.css";
 import GroupIcon from "@material-ui/icons/Group";
 import WorkIcon from "@material-ui/icons/Work";
 import AssignmentIcon from "@material-ui/icons/Assignment";
+import AccountBoxIcon from "@material-ui/icons/AccountBox";
 import { Link } from "react-router-dom";
 import {
   JOBS,
-  VIEWTASKS,
-  VIEWCANDIDATES,
   JOBLIST,
   TASKLIST,
+  COMPANYPROFILE,
+  WORKERPROFILE,
+  VIEWTASKS,
+  VIEWCANDIDATES,
 } from "../../constants/routePaths";
 import UserContext from "../../contexts/UserContext";
 
@@ -54,6 +57,11 @@ const companyMenuList = [
     label: "Candidates (Company)",
     icon: <GroupIcon />,
   },
+  {
+    path: COMPANYPROFILE,
+    label: "Profile (Company)",
+    icon: <AccountBoxIcon />,
+  },
 ];
 
 // List of menu for worker
@@ -67,6 +75,11 @@ const workerMenuList = [
     path: TASKLIST,
     label: "Tasks (Worker)",
     icon: <AssignmentIcon />,
+  },
+  {
+    path: WORKERPROFILE,
+    label: "Profile (Worker)",
+    icon: <AccountBoxIcon />,
   },
 ];
 

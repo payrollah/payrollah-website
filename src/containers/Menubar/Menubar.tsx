@@ -26,6 +26,7 @@ import {
   Worker__factory,
 } from "@payrollah/payrollah-registry";
 import EtherContext from "../../contexts/EtherContext";
+import MoodIcon from "@material-ui/icons/Mood";
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -126,6 +127,7 @@ const Menubar: React.FunctionComponent = () => {
         onClose={() => setRegisterOpen(false)}
       />
       <Toolbar>
+        <MoodIcon style={{ paddingRight: "8px", height: 30, width: 30 }} />
         <Typography variant="h6" noWrap className={classes.title}>
           Payrollah
         </Typography>

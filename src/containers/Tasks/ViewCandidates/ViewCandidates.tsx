@@ -1,8 +1,8 @@
 import {
-  // Button,
-  // Container,
+  Button,
+  Container,
   IconButton,
-  // makeStyles,
+  makeStyles,
   Typography,
 } from "@material-ui/core";
 import React, { useState } from "react";
@@ -16,23 +16,26 @@ import {
 import AccountBoxIcon from "@material-ui/icons/AccountBox";
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import AssignTask from "./AssignTask/AssignTask";
+import AssignmentIcon from "@material-ui/icons/Assignment";
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import ViewWorkerProfile from "./ViewWorkerProfile/ViewWorkerProfile";
 
-// const useStyles = makeStyles((theme) => ({
-//   buttonContainer: {
-//     display: "flex",
-//     justifyContent: "flex-end",
-//     paddingTop: "1em",
-//     paddingBottom: "1em",
-//   },
-// }));
+const useStyles = makeStyles((theme) => ({
+  buttonContainer: {
+    display: "flex",
+    justifyContent: "flex-end",
+    paddingTop: "1em",
+    paddingBottom: "1em",
+  },
+}));
 
 const taskTitle = "Task Title";
 
 const taskId = new URLSearchParams(window.location.search).get("task");
+const jobAddr = new URLSearchParams(window.location.search).get("job");
 
 const ViewCandidates: React.FunctionComponent = () => {
-  // const classes = useStyles();
+  const classes = useStyles();
 
   interface ViewCellProps {
     row: GridRowModel;
@@ -135,9 +138,25 @@ const ViewCandidates: React.FunctionComponent = () => {
         workerIdToView={workerIdToView}
         workerAddrToView={workerAddrToView}
       />
-      <Typography variant="h3" gutterBottom>
-        Candidates for [{taskTitle}]
-      </Typography>
+      <Container
+        disableGutters
+        maxWidth={false}
+        className={classes.buttonContainer}
+      >
+        <Typography variant="h3" gutterBottom style={{ width: "100%" }}>
+          Candidates for [{taskTitle}]
+        </Typography>
+        <Button
+          style={{ height: 40, width: 250 }}
+          variant="outlined"
+          color="primary"
+          endIcon={<AssignmentIcon />}
+          startIcon={<ArrowBackIcon />}
+          onClick={() => (window.location.href = "/tasks?job=" + jobAddr)}
+        >
+          Back to Tasks
+        </Button>
+      </Container>
       <Typography variant="subtitle1" gutterBottom>
         Task ID: {taskId}
       </Typography>
