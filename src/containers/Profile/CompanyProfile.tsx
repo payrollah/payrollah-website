@@ -62,10 +62,6 @@ const CompanyProfile: React.FunctionComponent = () => {
             <td className={classes.td}>ABC Company Pte Ltd</td>
           </tr>
           <tr className={classes.tr}>
-            <td className={classes.td}>Email</td>
-            <td className={classes.td}>is4302company@gmail.com</td>
-          </tr>
-          <tr className={classes.tr}>
             <td className={classes.td}>Company ID</td>
             <td className={classes.td}>{companyId}</td>
           </tr>

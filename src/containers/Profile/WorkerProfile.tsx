@@ -24,6 +24,7 @@ const WorkerProfile: React.FunctionComponent = () => {
   const classes = useStyles();
 
   const workerAddr = "0xfC16D162C6a9Ff85346cB42176428c26278F09D1";
+  const workerId = 999;
 
   const [viewWorkerProfileOpen, setViewWorkerProfileOpen] = useState(false);
   const [workerAddrToView] = useState(workerAddr);
@@ -59,16 +60,8 @@ const WorkerProfile: React.FunctionComponent = () => {
       <div style={{ width: "100%" }}>
         <table style={{ width: "100%" }}>
           <tr className={classes.tr}>
-            <td className={classes.td}>Name</td>
-            <td className={classes.td}>ABC</td>
-          </tr>
-          <tr className={classes.tr}>
-            <td className={classes.td}>NRIC</td>
-            <td className={classes.td}>SXXXXXXXX</td>
-          </tr>
-          <tr className={classes.tr}>
-            <td className={classes.td}>Email</td>
-            <td className={classes.td}>is4302employee@gmail.com</td>
+            <td className={classes.td}>Worker ID</td>
+            <td className={classes.td}>{workerId}</td>
           </tr>
           <tr className={classes.tr}>
             <td className={classes.td}>Account Address</td>
