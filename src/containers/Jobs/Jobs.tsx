@@ -5,7 +5,7 @@ import {
   makeStyles,
   Typography,
 } from "@material-ui/core";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import {
   DataGrid,
   GridCellParams,
@@ -64,7 +64,7 @@ const Jobs: React.FunctionComponent = () => {
     };
   };
 
-  const getJobList = () => {
+  const getJobList = useCallback(() => {
     setLoading(true);
     if (jobCreatorContract && signer) {
       const transferLogFilter = jobCreatorContract.filters.JobDeployed(
@@ -86,11 +86,11 @@ const Jobs: React.FunctionComponent = () => {
         });
     }
     setLoading(false);
-  };
+  }, [address, jobCreatorContract, signer]);
 
   useEffect(() => {
     getJobList();
-  }, []);
+  }, [getJobList]);
 
   const ViewCell: React.FunctionComponent<ViewCellProps> = ({
     row,
