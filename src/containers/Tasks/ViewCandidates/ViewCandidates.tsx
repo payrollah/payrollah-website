@@ -19,6 +19,7 @@ import AssignTask from "./AssignTask/AssignTask";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import ViewWorkerProfile from "./ViewWorkerProfile/ViewWorkerProfile";
+import { useHistory, useLocation, useParams } from "react-router";
 
 const useStyles = makeStyles((theme) => ({
   buttonContainer: {
@@ -31,11 +32,21 @@ const useStyles = makeStyles((theme) => ({
 
 const taskTitle = "Task Title";
 
-const taskId = new URLSearchParams(window.location.search).get("task");
-const jobAddr = new URLSearchParams(window.location.search).get("job");
+interface ViewCandidatesParams {
+  jobAddr: string;
+  taskId: string;
+}
 
 const ViewCandidates: React.FunctionComponent = () => {
   const classes = useStyles();
+
+  const { jobAddr, taskId: taskIdString } = useParams<ViewCandidatesParams>();
+  const taskId = Number(taskIdString);
+
+  const { state } = useLocation<any>();
+  const { taskTitle } = state;
+
+  const history = useHistory();
 
   interface ViewCellProps {
     row: GridRowModel;
@@ -131,6 +142,7 @@ const ViewCandidates: React.FunctionComponent = () => {
         onClose={() => setAssignTaskOpen(false)}
         taskId={taskIdToAssign}
         workerAddr={workerAddrToAssign}
+        jobAddr={jobAddr}
       />
       <ViewWorkerProfile
         open={viewWorkerProfileOpen}
@@ -152,7 +164,7 @@ const ViewCandidates: React.FunctionComponent = () => {
           color="primary"
           endIcon={<AssignmentIcon />}
           startIcon={<ArrowBackIcon />}
-          onClick={() => (window.location.href = "/tasks?job=" + jobAddr)}
+          onClick={history.goBack}
         >
           Back to Tasks
         </Button>

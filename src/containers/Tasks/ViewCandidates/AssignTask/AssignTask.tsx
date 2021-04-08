@@ -7,14 +7,17 @@ import {
   DialogTitle,
   LinearProgress,
 } from "@material-ui/core";
+import { Job__factory } from "@payrollah/payrollah-registry";
 import { Form, Formik } from "formik";
-import React from "react";
+import React, { useContext } from "react";
+import EtherContext from "../../../../contexts/EtherContext";
 
 interface Props {
   open: boolean;
   onClose: () => void;
   taskId: number;
   workerAddr: string;
+  jobAddr: string;
 }
 // Call Job contract function assignTask(taskId, assignTo)
 
@@ -23,7 +26,9 @@ const AssignTask: React.FunctionComponent<Props> = ({
   onClose,
   taskId,
   workerAddr,
+  jobAddr,
 }: Props) => {
+  const { signer } = useContext(EtherContext);
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle id="form-dialog-title">Task Assignment</DialogTitle>
@@ -33,13 +38,16 @@ const AssignTask: React.FunctionComponent<Props> = ({
           taskId: taskId,
           workerAddr: workerAddr,
         }}
-        onSubmit={(values, { setSubmitting }) => {
-          setTimeout(() => {
-            setSubmitting(false);
-            alert(JSON.stringify(values, null, 2));
-            // Call JobCreator contract function deployNewJob(string calldata _title, string calldata _description)
-            onClose();
-          }, 500);
+        onSubmit={async (values) => {
+          if (signer) {
+            try {
+              const jobContract = Job__factory.connect(jobAddr, signer);
+              await jobContract.assignTask(taskId, workerAddr);
+              onClose();
+            } catch (e) {
+              console.error(e);
+            }
+          }
         }}
       >
         {({ submitForm, isSubmitting }) => (

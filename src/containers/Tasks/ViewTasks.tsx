@@ -24,8 +24,9 @@ import ApproveTask from "./ApproveTask/ApproveTask";
 import { useLocation, useParams } from "react-router";
 import EtherContext from "../../contexts/EtherContext";
 import { Job__factory } from "@payrollah/payrollah-registry";
-import { JOBS } from "../../constants/routePaths";
+import { JOBS, VIEWCANDIDATES } from "../../constants/routePaths";
 import { Link } from "react-router-dom";
+import formatPath from "../../utils/formatPath";
 interface ViewTaskParams {
   jobAddr: string;
 }
@@ -117,14 +118,21 @@ const ViewTasks: React.FunctionComponent = () => {
     row,
   }: ViewCellProps) => {
     return (
-      <IconButton
-        onClick={() => {
-          window.location.href =
-            "/candidates?job=" + jobAddr + "&task=" + row.taskId;
+      <Link
+        to={{
+          pathname: formatPath(VIEWCANDIDATES, {
+            jobAddr: jobAddr,
+            taskId: row.taskId,
+          }),
+          state: {
+            taskTitle: row.taskTitle,
+          },
         }}
       >
-        <PeopleIcon />
-      </IconButton>
+        <IconButton>
+          <PeopleIcon />
+        </IconButton>
+      </Link>
     );
   };
 
