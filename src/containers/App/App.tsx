@@ -27,6 +27,7 @@ import {
 } from "@payrollah/payrollah-registry/dist/ts/contracts";
 import MetaMaskOnboarding from "@metamask/onboarding";
 import UserContext from "../../contexts/UserContext";
+import AppNavigatorAnonymous from "../AppNavigatorAnonymous/AppNavigatorAnonymous";
 
 const theme = createMuiTheme({
   overrides: {
@@ -135,7 +136,11 @@ const App: React.FunctionComponent = () => {
           <ThemeProvider theme={theme}>
             <BrowserRouter>
               <MuiPickersUtilsProvider utils={MomentUtils}>
-                <AppNavigatorAuthenticated />
+                {!!etherSigner ? (
+                  <AppNavigatorAuthenticated />
+                ) : (
+                  <AppNavigatorAnonymous />
+                )}
               </MuiPickersUtilsProvider>
             </BrowserRouter>
           </ThemeProvider>
