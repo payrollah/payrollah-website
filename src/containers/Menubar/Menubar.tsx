@@ -27,6 +27,12 @@ import {
 } from "@payrollah/payrollah-registry";
 import EtherContext from "../../contexts/EtherContext";
 import MoodIcon from "@material-ui/icons/Mood";
+import {
+  COMPANYPROFILE,
+  ROOT,
+  WORKERPROFILE,
+} from "../../constants/routePaths";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -39,6 +45,10 @@ const useStyles = makeStyles((theme) => ({
     "& > *": {
       margin: theme.spacing(1),
     },
+  },
+  menuItem: {
+    color: "inherit",
+    textDecoration: "none",
   },
 }));
 
@@ -63,6 +73,7 @@ const Menubar: React.FunctionComponent = () => {
   } = useContext(EtherContext);
 
   const {
+    isCompany,
     setName,
     setIsCompany,
     setCompanyId,
@@ -175,8 +186,19 @@ const Menubar: React.FunctionComponent = () => {
                 open={menuOpen}
                 onClose={handleMenuClose}
               >
-                <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-                <MenuItem onClick={handleLogout}>Logout</MenuItem>
+                <MenuItem onClick={handleMenuClose}>
+                  <Link
+                    to={isCompany ? COMPANYPROFILE : WORKERPROFILE}
+                    className={classes.menuItem}
+                  >
+                    Profile
+                  </Link>
+                </MenuItem>
+                <MenuItem onClick={handleLogout}>
+                  <Link to={ROOT} className={classes.menuItem}>
+                    Logout
+                  </Link>
+                </MenuItem>
               </Menu>
             </div>
           )}
