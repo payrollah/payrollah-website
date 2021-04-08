@@ -3,6 +3,7 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
+  DialogContentText,
   DialogTitle,
   // FormControl,
   // FormControlLabel,
@@ -13,7 +14,8 @@ import {
 } from "@material-ui/core";
 import { Field, Form, Formik, FormikErrors, FormikValues } from "formik";
 import { TextField } from "formik-material-ui";
-import React from "react";
+import React, { useContext, useState } from "react";
+import EtherContext from "../../../contexts/EtherContext";
 
 interface Props {
   open: boolean;
@@ -24,6 +26,9 @@ const CreateJob: React.FunctionComponent<Props> = ({
   open,
   onClose,
 }: Props) => {
+  const { jobCreatorContract } = useContext(EtherContext);
+  const [error, setError] = useState(false);
+
   return (
     <Dialog open={open} onClose={onClose} fullWidth>
       <DialogTitle>New Job</DialogTitle>
@@ -46,14 +51,22 @@ const CreateJob: React.FunctionComponent<Props> = ({
 
           return errors;
         }}
-        onSubmit={(values, { setSubmitting }) => {
-          setTimeout(() => {
-            setSubmitting(false);
-            alert(JSON.stringify(values, null, 2));
-            // Call JobCreator contract function deployNewJob(string calldata _title, string calldata _description)
-            onClose();
-            window.location.href = "/jobs";
-          }, 500);
+        onSubmit={async (values) => {
+          // Call JobCreator contract function deployNewJob(string calldata _title, string calldata _description)
+          try {
+            if (jobCreatorContract) {
+              const create = await jobCreatorContract.deployNewJob(
+                values.jobTitle,
+                values.jobDescription
+              );
+              console.log(create);
+            }
+          } catch (e) {
+            console.error(e);
+            setError(true);
+          }
+
+          onClose();
         }}
       >
         {({ submitForm, isSubmitting }) => (
@@ -81,6 +94,11 @@ const CreateJob: React.FunctionComponent<Props> = ({
                 **Once created, job cannot be removed!**
               </Typography>
               {isSubmitting && <LinearProgress />}
+              {error && (
+                <DialogContentText color="error" align="center">
+                  Unable to create job at the moment!
+                </DialogContentText>
+              )}
             </DialogContent>
             <DialogActions>
               <Button disabled={isSubmitting} onClick={onClose}>
