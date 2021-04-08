@@ -25,6 +25,8 @@ import {
 } from "../../../constants/contracts";
 import EtherContext from "../../../contexts/EtherContext";
 import UserContext from "../../../contexts/UserContext";
+import { Link } from "react-router-dom";
+import { VERIFY_DOCS } from "../../../constants/routePaths";
 
 interface Props {
   open: boolean;
@@ -174,6 +176,13 @@ const RegisterModal: React.FunctionComponent<Props> = ({
                 By clicking submit, you agree to use the address in your
                 MetaMask account to register with Payrollah
               </DialogContentText>
+              {values.isCompany && (
+                <DialogContentText>
+                  <Link to={VERIFY_DOCS} onClick={onClose}>
+                    How to setup DNS
+                  </Link>
+                </DialogContentText>
+              )}
               {isSubmitting && <LinearProgress />}
             </DialogContent>
             <DialogActions>
