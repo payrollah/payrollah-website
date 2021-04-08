@@ -5,7 +5,7 @@ import {
   makeStyles,
   Typography,
 } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import {
   DataGrid,
   GridCellParams,
@@ -21,6 +21,26 @@ import WorkIcon from "@material-ui/icons/Work";
 import GetAppIcon from "@material-ui/icons/GetApp";
 import AddTask from "./AddTask/AddTask";
 import ApproveTask from "./ApproveTask/ApproveTask";
+import { useLocation, useParams } from "react-router";
+import EtherContext from "../../contexts/EtherContext";
+import { Job__factory } from "@payrollah/payrollah-registry";
+import { JOBS } from "../../constants/routePaths";
+import { Link } from "react-router-dom";
+interface ViewTaskParams {
+  jobAddr: string;
+}
+
+interface ViewCellProps {
+  row: GridRowModel;
+}
+
+interface LinkCellProps {
+  row: GridRowModel;
+}
+
+interface ApproveCellProps {
+  row: GridRowModel;
+}
 
 const useStyles = makeStyles((theme) => ({
   buttonContainer: {
@@ -31,29 +51,67 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const jobTitle = "Job Title";
-
-const jobAddr = new URLSearchParams(window.location.search).get("job");
+// const jobTitle = "Job Title";
 
 const ViewTasks: React.FunctionComponent = () => {
   const classes = useStyles();
 
-  interface ViewCellProps {
-    row: GridRowModel;
-  }
+  const { jobAddr } = useParams<ViewTaskParams>();
 
-  interface LinkCellProps {
-    row: GridRowModel;
-  }
+  const { state } = useLocation<any>();
+  const jobTitle = state.jobTitle;
 
-  interface ApproveCellProps {
-    row: GridRowModel;
-  }
+  // const { taskContract, signer } = useContext(EtherContext);
 
   const [addTaskOpen, setAddTaskOpen] = useState(false);
 
   const [approveTaskOpen, setApproveTaskOpen] = useState(false);
   const [taskIdToApprove, setTaskIdToApprove] = useState(0);
+
+  // const [rows, setRows] = useState<GridRowModel[]>([]);
+  // const [loading, setLoading] = useState(false);
+
+  // const getTaskData = async (address: string, contract: Job) => {
+  //   return {
+  //     id: address,
+  //     jobAddr: address,
+  //     jobTitle: await contract.title(),
+  //     jobDescription: await contract.description(),
+  //     status: await contract.status(),
+  //   };
+  // };
+
+  // const getTaskList = useCallback(() => {
+  //   setLoading(true);
+  //   if (taskContract && signer) {
+  //     // get task list
+  //     const jobContract = Job__factory.connect(jobAddr, signer);
+  //     const taskAddresses = await jobContract.tasks;
+
+  //     const transferLogFilter = jobCreatorContract.filters.JobDeployed(
+  //       null,
+  //       address
+  //     );
+  //     jobCreatorContract
+  //       .queryFilter(transferLogFilter, 0)
+  //       .then(async (eventList) => {
+  //         setRows(
+  //           await Promise.all(
+  //             eventList.map((event) => {
+  //               const address = event.args.jobAddress;
+  //               const contract = Job__factory.connect(address, signer);
+  //               return getTaskData(address, contract);
+  //             })
+  //           )
+  //         );
+  //       });
+  //   }
+  //   setLoading(false);
+  // }, [address, jobCreatorContract, signer]);
+
+  // useEffect(() => {
+  //   getTaskList();
+  // }, [getTaskList]);
 
   const ViewCell: React.FunctionComponent<ViewCellProps> = ({
     row,
@@ -178,11 +236,16 @@ const ViewTasks: React.FunctionComponent = () => {
 
   return (
     <React.Fragment>
-      <AddTask open={addTaskOpen} onClose={() => setAddTaskOpen(false)} />
+      <AddTask
+        open={addTaskOpen}
+        onClose={() => setAddTaskOpen(false)}
+        jobAddr={jobAddr}
+      />
       <ApproveTask
         open={approveTaskOpen}
         onClose={() => setApproveTaskOpen(false)}
         taskId={taskIdToApprove}
+        jobAddr={jobAddr}
       />
       <Container
         disableGutters
@@ -192,16 +255,17 @@ const ViewTasks: React.FunctionComponent = () => {
         <Typography variant="h3" gutterBottom style={{ width: "100%" }}>
           Tasks for [{jobTitle}]
         </Typography>
-        <Button
-          style={{ height: 40, width: 230 }}
-          variant="outlined"
-          color="primary"
-          endIcon={<WorkIcon />}
-          startIcon={<ArrowBackIcon />}
-          onClick={() => (window.location.href = "/jobs")}
-        >
-          Back to Jobs
-        </Button>
+        <Link to={JOBS} style={{ textDecoration: "none" }}>
+          <Button
+            style={{ height: 40, width: 230 }}
+            variant="outlined"
+            color="primary"
+            endIcon={<WorkIcon />}
+            startIcon={<ArrowBackIcon />}
+          >
+            Back to Jobs
+          </Button>
+        </Link>
       </Container>
       <Typography variant="subtitle1" gutterBottom>
         Job Address: {jobAddr}

@@ -22,6 +22,9 @@ import EtherContext from "../../contexts/EtherContext";
 import UserContext from "../../contexts/UserContext";
 import { Job__factory } from "@payrollah/payrollah-registry";
 import { Job } from "@payrollah/payrollah-registry/dist/ts/contracts";
+import formatPath from "../../utils/formatPath";
+import { VIEWTASKS } from "../../constants/routePaths";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   buttonContainer: {
@@ -96,13 +99,18 @@ const Jobs: React.FunctionComponent = () => {
     row,
   }: ViewCellProps) => {
     return (
-      <IconButton
-        onClick={() => {
-          window.location.href = "/tasks?job=" + row.jobAddr;
+      <Link
+        to={{
+          pathname: formatPath(VIEWTASKS, {
+            jobAddr: row.jobAddr,
+          }),
+          state: { jobTitle: row.jobTitle },
         }}
       >
-        <AssignmentIcon />
-      </IconButton>
+        <IconButton>
+          <AssignmentIcon />
+        </IconButton>
+      </Link>
     );
   };
 
