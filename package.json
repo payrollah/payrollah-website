@@ -10,6 +10,7 @@
     "@material-ui/pickers": "^3.3.10",
     "@metamask/onboarding": "^1.0.0",
     "@payrollah/payrollah-registry": "^1.6.4",
+    "axios": "^0.21.1",
     "ethers": "^5.0.32",
     "formik": "^2.2.6",
     "formik-material-ui": "^3.0.1",

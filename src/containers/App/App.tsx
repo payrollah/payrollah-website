@@ -26,6 +26,8 @@ import {
   Worker,
 } from "@payrollah/payrollah-registry/dist/ts/contracts";
 import MetaMaskOnboarding from "@metamask/onboarding";
+import UserContext from "../../contexts/UserContext";
+import AppNavigatorAnonymous from "../AppNavigatorAnonymous/AppNavigatorAnonymous";
 
 const theme = createMuiTheme({
   overrides: {
@@ -58,10 +60,15 @@ const App: React.FunctionComponent = () => {
   const [taskContract, setTaskContract] = useState<Task>();
   const [workerContract, setWorkerContract] = useState<Worker>();
 
+  const [name, setName] = useState("");
+  const [isCompany, setIsCompany] = useState(false);
+  const [companyId, setCompanyId] = useState<number>();
+  const [workerId, setWorkerId] = useState<number>();
+  const [address, setAddress] = useState("");
+
   useEffect(() => {
     const { ethereum } = window as any;
     if (MetaMaskOnboarding.isMetaMaskInstalled()) {
-      ethereum.send("eth_requestAccounts");
       const provider = new ethers.providers.Web3Provider(ethereum);
       setEtherProvider(provider);
 
@@ -90,9 +97,7 @@ const App: React.FunctionComponent = () => {
       //   null,
       //   "0x9E05Aa244F582caE032DE2271C81067846818a55"
       // );
-      // jobCreatorContract
-      //   .queryFilter(transferLogFilter, 0)
-      //   .then(console.log);
+      // jobCreatorContract.queryFilter(transferLogFilter, 0).then(console.log);
     }
   }, []);
 
@@ -114,13 +119,32 @@ const App: React.FunctionComponent = () => {
           setWorkerContract,
         }}
       >
-        <ThemeProvider theme={theme}>
-          <BrowserRouter>
-            <MuiPickersUtilsProvider utils={MomentUtils}>
-              <AppNavigatorAuthenticated />
-            </MuiPickersUtilsProvider>
-          </BrowserRouter>
-        </ThemeProvider>
+        <UserContext.Provider
+          value={{
+            name,
+            isCompany,
+            companyId,
+            workerId,
+            address,
+            setName,
+            setIsCompany,
+            setCompanyId,
+            setWorkerId,
+            setAddress,
+          }}
+        >
+          <ThemeProvider theme={theme}>
+            <BrowserRouter>
+              <MuiPickersUtilsProvider utils={MomentUtils}>
+                {!!etherSigner ? (
+                  <AppNavigatorAuthenticated />
+                ) : (
+                  <AppNavigatorAnonymous />
+                )}
+              </MuiPickersUtilsProvider>
+            </BrowserRouter>
+          </ThemeProvider>
+        </UserContext.Provider>
       </EtherContext.Provider>
     </div>
   );
