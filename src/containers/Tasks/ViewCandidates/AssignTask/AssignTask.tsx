@@ -1,3 +1,4 @@
+import { BigNumber } from "@ethersproject/bignumber";
 import {
   Button,
   Dialog,
@@ -38,11 +39,11 @@ const AssignTask: React.FunctionComponent<Props> = ({
           taskId: taskId,
           workerAddr: workerAddr,
         }}
-        onSubmit={async (values) => {
+        onSubmit={async () => {
           if (signer) {
             try {
               const jobContract = Job__factory.connect(jobAddr, signer);
-              await jobContract.assignTask(taskId, workerAddr);
+              await jobContract.assignTask(BigNumber.from(taskId), workerAddr);
               onClose();
             } catch (e) {
               console.error(e);
