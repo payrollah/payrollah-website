@@ -5,7 +5,7 @@ import {
   makeStyles,
   Typography,
 } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import {
   DataGrid,
   GridCellParams,
@@ -20,6 +20,7 @@ import AssignmentIcon from "@material-ui/icons/Assignment";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import ViewWorkerProfile from "./ViewWorkerProfile/ViewWorkerProfile";
 import { useHistory, useLocation, useParams } from "react-router";
+import EtherContext from "../../../contexts/EtherContext";
 
 const useStyles = makeStyles((theme) => ({
   buttonContainer: {
@@ -30,7 +31,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const taskTitle = "Task Title";
+interface ViewCellProps {
+  row: GridRowModel;
+}
+
+interface AssignCellProps {
+  row: GridRowModel;
+}
 
 interface ViewCandidatesParams {
   jobAddr: string;
@@ -48,13 +55,45 @@ const ViewCandidates: React.FunctionComponent = () => {
 
   const history = useHistory();
 
-  interface ViewCellProps {
-    row: GridRowModel;
-  }
+  const { taskContract, workerContract, signer } = useContext(EtherContext);
 
-  interface AssignCellProps {
-    row: GridRowModel;
-  }
+  const [rows, setRows] = useState<GridRowModel[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const getCandidateList = useCallback(() => {
+    setLoading(true);
+    if (taskContract && workerContract && signer) {
+      // get candidate list
+      try {
+        taskContract
+          .getCandidateByTask(taskId)
+          .then(async (candidateAddresses: string[]) => {
+            setRows(
+              await Promise.all(
+                candidateAddresses.map(async (candidateAddr) => {
+                  const candidateId = (
+                    await workerContract.getWorkerIdByAddress(candidateAddr)
+                  ).toNumber();
+                  return {
+                    id: candidateId,
+                    workerId: candidateId,
+                    workerAddr: candidateAddr,
+                  };
+                })
+              )
+            );
+          });
+        setLoading(false);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    setLoading(false);
+  }, [signer, taskContract, workerContract, taskId]);
+
+  useEffect(() => {
+    getCandidateList();
+  }, [getCandidateList]);
 
   const [viewWorkerProfileOpen, setViewWorkerProfileOpen] = useState(false);
   const [workerAddrToView, setWorkerAddrToView] = useState("");
@@ -127,14 +166,6 @@ const ViewCandidates: React.FunctionComponent = () => {
     },
   ];
 
-  const rows = [
-    {
-      id: 1,
-      workerId: 1,
-      workerAddr: "0xfC16D162C6a9Ff85346cB42176428c26278F09D1",
-    },
-  ];
-
   return (
     <React.Fragment>
       <AssignTask
@@ -180,6 +211,7 @@ const ViewCandidates: React.FunctionComponent = () => {
           components={{
             Toolbar: GridToolbar,
           }}
+          loading={loading}
         />
       </div>
     </React.Fragment>
