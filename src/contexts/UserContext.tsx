@@ -6,17 +6,20 @@ interface UserProvider {
   companyId?: number;
   workerId?: number;
   address: string;
+  domain: string;
   setName: (name: string) => void;
   setAddress: (address: string) => void;
   setIsCompany: (value: boolean) => void;
   setCompanyId: (value: number) => void;
   setWorkerId: (value: number) => void;
+  setDomain: (domain: string) => void;
 }
 
 const UserContext = React.createContext<UserProvider>({
   name: "",
   isCompany: false,
   address: "",
+  domain: "",
   setName: (name: string) => {
     return;
   },
@@ -30,6 +33,9 @@ const UserContext = React.createContext<UserProvider>({
     return;
   },
   setAddress: (name: string) => {
+    return;
+  },
+  setDomain: (name: string) => {
     return;
   },
 });

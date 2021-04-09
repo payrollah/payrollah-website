@@ -139,15 +139,21 @@ const ViewTasks: React.FunctionComponent = () => {
   const LinkCell: React.FunctionComponent<LinkCellProps> = ({
     row,
   }: LinkCellProps) => {
-    return (
-      <IconButton
-        onClick={() => {
-          window.open(row.evidence);
-        }}
-      >
-        <GetAppIcon />
-      </IconButton>
-    );
+    if (!!row.evidence) {
+      // Have evidence
+      return (
+        <IconButton
+          onClick={() => {
+            window.open(row.evidence);
+          }}
+        >
+          <GetAppIcon />
+        </IconButton>
+      );
+    } else {
+      // Not evidence
+      return <Typography>-</Typography>;
+    }
   };
 
   const ApproveCell: React.FunctionComponent<ApproveCellProps> = ({
@@ -190,7 +196,7 @@ const ViewTasks: React.FunctionComponent = () => {
     {
       field: "status",
       headerName: "Status",
-      width: 100,
+      width: 120,
       disableClickEventBubbling: true,
     },
     {
@@ -206,7 +212,7 @@ const ViewTasks: React.FunctionComponent = () => {
     {
       field: "assignedTo",
       headerName: "Hiree",
-      width: 100,
+      width: 120,
       disableClickEventBubbling: true,
     },
     {

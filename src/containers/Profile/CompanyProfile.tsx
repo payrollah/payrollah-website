@@ -1,8 +1,9 @@
 import { Button, Container, makeStyles, Typography } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import BlockIcon from "@material-ui/icons/Block";
 import DisableCompany from "./DisableCompany/DisableCompany";
 import BusinessIcon from "@material-ui/icons/Business";
+import UserContext from "../../contexts/UserContext";
 
 const useStyles = makeStyles((theme) => ({
   buttonContainer: {
@@ -23,11 +24,10 @@ const useStyles = makeStyles((theme) => ({
 const CompanyProfile: React.FunctionComponent = () => {
   const classes = useStyles();
 
-  const companyAddr = "0xfC16D162C6a9Ff85346cB42176428c26278F09D1";
-  const companyId = 666;
+  const { name, address, companyId, domain } = useContext(UserContext);
 
   const [disableCompanyOpen, setDisableCompanyOpen] = useState(false);
-  const [companyIdToDisable] = useState(companyId);
+  const [companyIdToDisable] = useState(Number(companyId));
 
   return (
     <React.Fragment>
@@ -59,7 +59,7 @@ const CompanyProfile: React.FunctionComponent = () => {
         <table style={{ width: "100%" }}>
           <tr className={classes.tr}>
             <td className={classes.td}>Name</td>
-            <td className={classes.td}>ABC Company Pte Ltd</td>
+            <td className={classes.td}>{name}</td>
           </tr>
           <tr className={classes.tr}>
             <td className={classes.td}>Company ID</td>
@@ -67,11 +67,11 @@ const CompanyProfile: React.FunctionComponent = () => {
           </tr>
           <tr className={classes.tr}>
             <td className={classes.td}>Domain</td>
-            <td className={classes.td}>.......</td>
+            <td className={classes.td}>{domain}</td>
           </tr>
           <tr className={classes.tr}>
             <td className={classes.td}>Account Address</td>
-            <td className={classes.td}>{companyAddr}</td>
+            <td className={classes.td}>{address}</td>
           </tr>
         </table>
       </div>

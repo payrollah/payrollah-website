@@ -55,6 +55,7 @@ const LoginModal: React.FunctionComponent<Props> = ({
     setCompanyId,
     setWorkerId,
     setAddress,
+    setDomain,
   } = useContext(UserContext);
 
   const onConnect = async () => {
@@ -101,12 +102,14 @@ const LoginModal: React.FunctionComponent<Props> = ({
 
           const company = await companyContract.companies(companyId);
           setName(company.name);
+          setDomain(company.domain);
         } else {
           const workerId = await workerContract.getWorkerIdByAddress(address);
 
           setWorkerId(workerId.toNumber());
           setIsCompany(false);
           setName("");
+          setDomain("");
         }
         setAddress(address);
         onClose();
