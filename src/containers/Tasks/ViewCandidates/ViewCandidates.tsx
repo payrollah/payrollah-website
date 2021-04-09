@@ -78,6 +78,7 @@ const ViewCandidates: React.FunctionComponent = () => {
                     id: candidateId,
                     workerId: candidateId,
                     workerAddr: candidateAddr,
+                    taskId: taskId,
                   };
                 })
               )
