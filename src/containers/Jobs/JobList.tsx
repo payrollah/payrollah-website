@@ -63,7 +63,6 @@ const JobList: React.FunctionComponent = () => {
         return await Promise.all(
           taskIds.map(async (taskId) => {
             const task = await taskContract.tasks(taskId);
-
             const isCandidate = await taskContract.isCandidate(
               taskId.toNumber(),
               address

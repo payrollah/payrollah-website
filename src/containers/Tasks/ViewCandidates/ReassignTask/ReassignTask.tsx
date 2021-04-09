@@ -1,54 +1,52 @@
+import { BigNumber } from "@ethersproject/bignumber";
 import {
   Button,
   Dialog,
   DialogActions,
   DialogContent,
+  DialogContentText,
   DialogTitle,
   LinearProgress,
 } from "@material-ui/core";
 import { Job__factory } from "@payrollah/payrollah-registry";
-import { Field, Form, Formik, FormikErrors, FormikValues } from "formik";
-import { TextField } from "formik-material-ui";
+import { Form, Formik } from "formik";
 import React, { useContext } from "react";
-import EtherContext from "../../../contexts/EtherContext";
+import EtherContext from "../../../../contexts/EtherContext";
 
 interface Props {
   open: boolean;
   onClose: () => void;
   taskId: number;
+  workerAddr: string;
   jobAddr: string;
 }
+// Call Job contract function assignTask(taskId, assignTo)
 
-const SubmitTask: React.FunctionComponent<Props> = ({
+const RessignTask: React.FunctionComponent<Props> = ({
   open,
   onClose,
   taskId,
+  workerAddr,
   jobAddr,
 }: Props) => {
   const { signer } = useContext(EtherContext);
-
   return (
-    <Dialog open={open} onClose={onClose} fullWidth>
-      <DialogTitle>Submit for Task ID: {taskId}</DialogTitle>
+    <Dialog open={open} onClose={onClose}>
+      <DialogTitle id="form-dialog-title">Task Reassignment</DialogTitle>
+
       <Formik
         initialValues={{
-          evidence: "",
           taskId: taskId,
+          workerAddr: workerAddr,
         }}
-        validate={(values) => {
-          const errors: FormikErrors<FormikValues> = {};
-
-          if (!values.evidence) {
-            errors.evidence = "Required";
-          }
-
-          return errors;
-        }}
-        onSubmit={async (values) => {
+        onSubmit={async () => {
           if (signer) {
             try {
               const jobContract = Job__factory.connect(jobAddr, signer);
-              await jobContract.submitTask(taskId, values.evidence);
+              await jobContract.reAssignTask(
+                BigNumber.from(taskId),
+                workerAddr
+              );
               onClose();
             } catch (e) {
               console.error(e);
@@ -59,24 +57,21 @@ const SubmitTask: React.FunctionComponent<Props> = ({
         {({ submitForm, isSubmitting }) => (
           <Form>
             <DialogContent>
-              <Field
-                component={TextField}
-                label="Hyperlink to Work"
-                name="evidence"
-                fullWidth
-              />
+              <DialogContentText>
+                Are you sure you want to reassign the task to this person?
+              </DialogContentText>
               {isSubmitting && <LinearProgress />}
             </DialogContent>
             <DialogActions>
-              <Button disabled={isSubmitting} onClick={onClose}>
-                Cancel
-              </Button>
               <Button
-                color="primary"
+                color="secondary"
                 disabled={isSubmitting}
                 onClick={submitForm}
               >
-                Submit
+                Yes
+              </Button>
+              <Button disabled={isSubmitting} onClick={onClose} color="primary">
+                No
               </Button>
             </DialogActions>
           </Form>
@@ -86,4 +81,4 @@ const SubmitTask: React.FunctionComponent<Props> = ({
   );
 };
 
-export default SubmitTask;
+export default RessignTask;

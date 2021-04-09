@@ -20,6 +20,7 @@ import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import WorkIcon from "@material-ui/icons/Work";
 import GetAppIcon from "@material-ui/icons/GetApp";
 import CloseIcon from "@material-ui/icons/Close";
+import DoneIcon from "@material-ui/icons/Done";
 import AddTask from "./AddTask/AddTask";
 import ApproveTask from "./ApproveTask/ApproveTask";
 import { useLocation, useParams } from "react-router";
@@ -98,6 +99,7 @@ const ViewTasks: React.FunctionComponent = () => {
                       ? "Not Assigned"
                       : task.assignedTo,
                   evidence: task.evidence,
+                  isComplete: task.isComplete,
                 };
               })
             )
@@ -118,23 +120,32 @@ const ViewTasks: React.FunctionComponent = () => {
   const ViewCell: React.FunctionComponent<ViewCellProps> = ({
     row,
   }: ViewCellProps) => {
-    return (
-      <Link
-        to={{
-          pathname: formatPath(VIEWCANDIDATES, {
-            jobAddr: jobAddr,
-            taskId: row.taskId,
-          }),
-          state: {
-            taskTitle: row.taskTitle,
-          },
-        }}
-      >
-        <IconButton>
+    if (!!row.evidence) {
+      return (
+        <IconButton disabled={true}>
           <PeopleIcon />
         </IconButton>
-      </Link>
-    );
+      );
+    } else {
+      return (
+        <Link
+          to={{
+            pathname: formatPath(VIEWCANDIDATES, {
+              jobAddr: jobAddr,
+              taskId: row.taskId,
+            }),
+            state: {
+              taskTitle: row.taskTitle,
+              assignedTo: row.assignedTo,
+            },
+          }}
+        >
+          <IconButton>
+            <PeopleIcon />
+          </IconButton>
+        </Link>
+      );
+    }
   };
 
   const LinkCell: React.FunctionComponent<LinkCellProps> = ({
@@ -160,16 +171,20 @@ const ViewTasks: React.FunctionComponent = () => {
   const ApproveCell: React.FunctionComponent<ApproveCellProps> = ({
     row,
   }: ApproveCellProps) => {
-    return (
-      <IconButton
-        onClick={() => {
-          setTaskIdToApprove(row.taskId);
-          setApproveTaskOpen(true);
-        }}
-      >
-        <ThumbUpIcon />
-      </IconButton>
-    );
+    if (row.isComplete === false) {
+      return (
+        <IconButton
+          onClick={() => {
+            setTaskIdToApprove(row.taskId);
+            setApproveTaskOpen(true);
+          }}
+        >
+          <ThumbUpIcon />
+        </IconButton>
+      );
+    } else {
+      return <DoneIcon style={{ width: "100%" }} />;
+    }
   };
 
   const columns: GridColDef[] = [

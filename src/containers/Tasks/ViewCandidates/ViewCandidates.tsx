@@ -15,9 +15,12 @@ import {
 } from "@material-ui/data-grid";
 import AccountBoxIcon from "@material-ui/icons/AccountBox";
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
-import AssignTask from "./AssignTask/AssignTask";
+import AssignTask from "./ReassignTask/ReassignTask";
+import ReassignTask from "./ReassignTask/ReassignTask";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import CloseIcon from "@material-ui/icons/Close";
+import ReplayIcon from "@material-ui/icons/Replay";
 import ViewWorkerProfile from "./ViewWorkerProfile/ViewWorkerProfile";
 import { useHistory, useLocation, useParams } from "react-router";
 import EtherContext from "../../../contexts/EtherContext";
@@ -51,7 +54,7 @@ const ViewCandidates: React.FunctionComponent = () => {
   const taskId = Number(taskIdString);
 
   const { state } = useLocation<any>();
-  const { taskTitle } = state;
+  const { taskTitle, assignedTo } = state;
 
   const history = useHistory();
 
@@ -65,6 +68,10 @@ const ViewCandidates: React.FunctionComponent = () => {
     if (taskContract && workerContract && signer) {
       // get candidate list
       try {
+        let isAssignedBool = false;
+        if (Number(assignedTo) !== 0) {
+          isAssignedBool = true;
+        }
         taskContract
           .getCandidateByTask(taskId)
           .then(async (candidateAddresses: string[]) => {
@@ -74,11 +81,19 @@ const ViewCandidates: React.FunctionComponent = () => {
                   const candidateId = (
                     await workerContract.getWorkerIdByAddress(candidateAddr)
                   ).toNumber();
+
+                  let assignedToUserBool = false;
+                  if (candidateAddr === assignedTo) {
+                    assignedToUserBool = true;
+                  }
+
                   return {
                     id: candidateId,
                     workerId: candidateId,
                     workerAddr: candidateAddr,
                     taskId: taskId,
+                    isAssignedToCandidate: assignedToUserBool,
+                    isAssigned: isAssignedBool,
                   };
                 })
               )
@@ -90,7 +105,7 @@ const ViewCandidates: React.FunctionComponent = () => {
       }
     }
     setLoading(false);
-  }, [signer, taskContract, workerContract, taskId]);
+  }, [signer, taskContract, workerContract, taskId, assignedTo]);
 
   useEffect(() => {
     getCandidateList();
@@ -103,6 +118,10 @@ const ViewCandidates: React.FunctionComponent = () => {
   const [assignTaskOpen, setAssignTaskOpen] = useState(false);
   const [taskIdToAssign, setTaskIdToAssign] = useState(0);
   const [workerAddrToAssign, setWorkerAddrToAssign] = useState("");
+
+  const [reassignTaskOpen, setReassignTaskOpen] = useState(false);
+  const [taskIdToReassign, setTaskIdToReassign] = useState(0);
+  const [workerAddrToReassign, setWorkerAddrToReassign] = useState("");
 
   const ViewCell: React.FunctionComponent<ViewCellProps> = ({
     row,
@@ -123,17 +142,43 @@ const ViewCandidates: React.FunctionComponent = () => {
   const AssignCell: React.FunctionComponent<AssignCellProps> = ({
     row,
   }: AssignCellProps) => {
-    return (
-      <IconButton
-        onClick={() => {
-          setWorkerAddrToAssign(row.workerAddr);
-          setTaskIdToAssign(row.taskId);
-          setAssignTaskOpen(true);
-        }}
-      >
-        <ThumbUpIcon />
-      </IconButton>
-    );
+    if (!!row.isAssigned) {
+      // Is assigned
+      if (!!row.isAssignedToCandidate) {
+        // Is assigned to candidate
+        return (
+          <IconButton disabled={true}>
+            <CloseIcon />
+          </IconButton>
+        );
+      } else {
+        // Not assigned to candidate
+        return (
+          <IconButton
+            onClick={() => {
+              setWorkerAddrToReassign(row.workerAddr);
+              setTaskIdToReassign(row.taskId);
+              setReassignTaskOpen(true);
+            }}
+          >
+            <ReplayIcon />
+          </IconButton>
+        );
+      }
+    } else {
+      // Not assigned
+      return (
+        <IconButton
+          onClick={() => {
+            setWorkerAddrToAssign(row.workerAddr);
+            setTaskIdToAssign(row.taskId);
+            setAssignTaskOpen(true);
+          }}
+        >
+          <ThumbUpIcon />
+        </IconButton>
+      );
+    }
   };
 
   const columns: GridColDef[] = [
@@ -167,6 +212,10 @@ const ViewCandidates: React.FunctionComponent = () => {
     },
   ];
 
+  if (Number(assignedTo) !== 0) {
+    columns[4]["headerName"] = "Reassign";
+  }
+
   return (
     <React.Fragment>
       <AssignTask
@@ -174,6 +223,13 @@ const ViewCandidates: React.FunctionComponent = () => {
         onClose={() => setAssignTaskOpen(false)}
         taskId={taskIdToAssign}
         workerAddr={workerAddrToAssign}
+        jobAddr={jobAddr}
+      />
+      <ReassignTask
+        open={reassignTaskOpen}
+        onClose={() => setReassignTaskOpen(false)}
+        taskId={taskIdToReassign}
+        workerAddr={workerAddrToReassign}
         jobAddr={jobAddr}
       />
       <ViewWorkerProfile
