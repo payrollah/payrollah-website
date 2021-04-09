@@ -5,7 +5,7 @@ import {
   // makeStyles,
   Typography,
 } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import {
   DataGrid,
   GridCellParams,
@@ -16,6 +16,12 @@ import {
 // import AssignmentIcon from "@material-ui/icons/Assignment";
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import AddCandidate from "./AddCandidate/AddCandidate";
+import { Job__factory } from "@payrollah/payrollah-registry";
+import { Job } from "@payrollah/payrollah-registry/dist/ts/contracts";
+import UserContext from "../../contexts/UserContext";
+import EtherContext from "../../contexts/EtherContext";
+import { BigNumber } from "@ethersproject/bignumber";
+import { flatten } from "lodash";
 
 // const useStyles = makeStyles((theme) => ({
 //   buttonContainer: {
@@ -35,6 +41,78 @@ const JobList: React.FunctionComponent = () => {
 
   const [addCandidateOpen, setAddCandidateOpen] = useState(false);
   const [taskIdToAdd, setTaskIdToAdd] = useState(0);
+  const [jobAddrToAdd, setJobAddrToAdd] = useState("");
+
+  const [rows, setRows] = useState<GridRowModel[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  const {
+    jobCreatorContract,
+    taskContract,
+    companyContract,
+    signer,
+  } = useContext(EtherContext);
+  const { address } = useContext(UserContext);
+
+  const getJobData = async (jobAddr: string, contract: Job) => {
+    if (!taskContract || !companyContract) return [];
+
+    return await contract.getTasks().then(async (taskIds: BigNumber[]) => {
+      return await Promise.all(
+        taskIds.map(async (taskId) => {
+          const task = await taskContract.tasks(taskId);
+          return {
+            id: taskId.toNumber(),
+            jobAddr: jobAddr,
+            company: (
+              await contract
+                .jobOwner()
+                .then((ownerAddr) =>
+                  companyContract.getCompanyIdByAddress(ownerAddr)
+                )
+                .then((companyId) => companyContract.companies(companyId))
+            ).name,
+            jobTitle: await contract.title(),
+            jobDescription: await contract.description(),
+            taskId: taskId.toNumber(),
+            taskTitle: task.title,
+            taskDescription: task.description,
+            compensation: task.compensation.toNumber(),
+          };
+        })
+      );
+    });
+  };
+
+  const getJobList = useCallback(() => {
+    setLoading(true);
+    if (jobCreatorContract && taskContract && signer) {
+      const transferLogFilter = jobCreatorContract.filters.JobDeployed(
+        null,
+        null
+      );
+      jobCreatorContract
+        .queryFilter(transferLogFilter, 0)
+        .then(async (eventList) => {
+          setRows(
+            flatten(
+              await Promise.all(
+                eventList.map((event) => {
+                  const address = event.args.jobAddress;
+                  const contract = Job__factory.connect(address, signer);
+                  return getJobData(address, contract);
+                })
+              )
+            )
+          );
+          setLoading(false);
+        });
+    }
+  }, [address, jobCreatorContract, signer]);
+
+  useEffect(() => {
+    getJobList();
+  }, [getJobList]);
 
   const AddCell: React.FunctionComponent<AddCellProps> = ({
     row,
@@ -43,6 +121,7 @@ const JobList: React.FunctionComponent = () => {
       <IconButton
         onClick={() => {
           setTaskIdToAdd(row.taskId);
+          setJobAddrToAdd(row.jobAddr);
           setAddCandidateOpen(true);
         }}
       >
@@ -110,25 +189,13 @@ const JobList: React.FunctionComponent = () => {
     },
   ];
 
-  const rows = [
-    {
-      id: 1,
-      jobAddr: "0x....",
-      company: "ABC Company",
-      jobTitle: "ABC Developer",
-      jobDescription: "Job Description",
-      taskId: 1,
-      taskTitle: "Backend Implementation",
-      taskDescription: "Develop the backend for ....",
-      compensation: 10,
-    },
-  ];
   return (
     <React.Fragment>
       <AddCandidate
         open={addCandidateOpen}
         onClose={() => setAddCandidateOpen(false)}
         taskId={taskIdToAdd}
+        jobAddr={jobAddrToAdd}
       />
       <Typography variant="h3" gutterBottom>
         Available Jobs
@@ -141,6 +208,7 @@ const JobList: React.FunctionComponent = () => {
           components={{
             Toolbar: GridToolbar,
           }}
+          loading={loading}
         />
       </div>
     </React.Fragment>
