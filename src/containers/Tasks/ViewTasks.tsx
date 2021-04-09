@@ -19,6 +19,7 @@ import AssignmentIcon from "@material-ui/icons/Assignment";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import WorkIcon from "@material-ui/icons/Work";
 import GetAppIcon from "@material-ui/icons/GetApp";
+import CloseIcon from "@material-ui/icons/Close";
 import AddTask from "./AddTask/AddTask";
 import ApproveTask from "./ApproveTask/ApproveTask";
 import { useLocation, useParams } from "react-router";
@@ -151,8 +152,8 @@ const ViewTasks: React.FunctionComponent = () => {
         </IconButton>
       );
     } else {
-      // Not evidence
-      return <Typography>-</Typography>;
+      // No evidence
+      return <CloseIcon style={{ width: "100%" }} />;
     }
   };
 
