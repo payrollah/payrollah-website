@@ -6,21 +6,27 @@ import {
   DialogTitle,
   LinearProgress,
 } from "@material-ui/core";
+import { Job__factory } from "@payrollah/payrollah-registry";
 import { Field, Form, Formik, FormikErrors, FormikValues } from "formik";
 import { TextField } from "formik-material-ui";
-import React from "react";
+import React, { useContext } from "react";
+import EtherContext from "../../../contexts/EtherContext";
 
 interface Props {
   open: boolean;
   onClose: () => void;
   taskId: number;
+  jobAddr: string;
 }
 
 const SubmitTask: React.FunctionComponent<Props> = ({
   open,
   onClose,
   taskId,
+  jobAddr,
 }: Props) => {
+  const { signer } = useContext(EtherContext);
+
   return (
     <Dialog open={open} onClose={onClose} fullWidth>
       <DialogTitle>Submit for Task ID: {taskId}</DialogTitle>
@@ -38,14 +44,16 @@ const SubmitTask: React.FunctionComponent<Props> = ({
 
           return errors;
         }}
-        onSubmit={(values, { setSubmitting }) => {
-          setTimeout(() => {
-            setSubmitting(false);
-            alert(JSON.stringify(values, null, 2));
-
-            // Call Job contract function submitTask(taskId, evidence)
-            onClose();
-          }, 500);
+        onSubmit={async (values) => {
+          if (signer) {
+            try {
+              const jobContract = Job__factory.connect(jobAddr, signer);
+              await jobContract.submitTask(taskId, values.evidence);
+              onClose();
+            } catch (e) {
+              console.error(e);
+            }
+          }
         }}
       >
         {({ submitForm, isSubmitting }) => (

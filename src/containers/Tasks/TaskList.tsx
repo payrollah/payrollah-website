@@ -39,6 +39,7 @@ const TaskList: React.FunctionComponent = () => {
 
   const [submitTaskOpen, setSubmitTaskOpen] = useState(false);
   const [taskIdToSubmit, setTaskIdToSubmit] = useState(0);
+  const [jobAddrToSubmit, setJobAddrToSubmit] = useState("");
 
   const [rows, setRows] = useState<GridRowModel[]>([]);
   const [loading, setLoading] = useState(false);
@@ -107,6 +108,7 @@ const TaskList: React.FunctionComponent = () => {
                     taskTitle: task.title,
                     taskDescription: task.description,
                     compensation: task.compensation,
+                    evidenceSubmitted: task.evidence.length > 0,
                   };
                 })
               )
@@ -124,10 +126,13 @@ const TaskList: React.FunctionComponent = () => {
   const SubmitCell: React.FunctionComponent<SubmitCellProps> = ({
     row,
   }: SubmitCellProps) => {
-    return (
+    return row.evidenceSubmitted ? (
+      <div>Submitted</div>
+    ) : (
       <IconButton
         onClick={() => {
           setTaskIdToSubmit(row.taskId);
+          setJobAddrToSubmit(row.jobAddr);
           setSubmitTaskOpen(true);
         }}
       >
@@ -201,6 +206,7 @@ const TaskList: React.FunctionComponent = () => {
         open={submitTaskOpen}
         onClose={() => setSubmitTaskOpen(false)}
         taskId={taskIdToSubmit}
+        jobAddr={jobAddrToSubmit}
       />
       <Typography variant="h3" gutterBottom>
         Pending Tasks
