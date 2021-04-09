@@ -27,6 +27,8 @@ import { Job__factory } from "@payrollah/payrollah-registry";
 import { JOBS, VIEWCANDIDATES } from "../../constants/routePaths";
 import { Link } from "react-router-dom";
 import formatPath from "../../utils/formatPath";
+import { BigNumber } from "@ethersproject/bignumber";
+import { ethers } from "ethers";
 interface ViewTaskParams {
   jobAddr: string;
 }
@@ -62,57 +64,55 @@ const ViewTasks: React.FunctionComponent = () => {
   const { state } = useLocation<any>();
   const jobTitle = state.jobTitle;
 
-  // const { taskContract, signer } = useContext(EtherContext);
+  const { taskContract, signer } = useContext(EtherContext);
 
   const [addTaskOpen, setAddTaskOpen] = useState(false);
 
   const [approveTaskOpen, setApproveTaskOpen] = useState(false);
   const [taskIdToApprove, setTaskIdToApprove] = useState(0);
 
-  // const [rows, setRows] = useState<GridRowModel[]>([]);
-  // const [loading, setLoading] = useState(false);
+  const [rows, setRows] = useState<GridRowModel[]>([]);
+  const [loading, setLoading] = useState(false);
 
-  // const getTaskData = async (address: string, contract: Job) => {
-  //   return {
-  //     id: address,
-  //     jobAddr: address,
-  //     jobTitle: await contract.title(),
-  //     jobDescription: await contract.description(),
-  //     status: await contract.status(),
-  //   };
-  // };
+  const getTaskList = useCallback(() => {
+    setLoading(true);
+    if (taskContract && signer) {
+      // get task list
+      const jobContract = Job__factory.connect(jobAddr, signer);
+      try {
+        jobContract.getTasks().then(async (taskIds: BigNumber[]) => {
+          setRows(
+            await Promise.all(
+              taskIds.map(async (taskId: BigNumber) => {
+                const task = await taskContract.tasks(taskId);
+                return {
+                  id: taskId.toNumber(),
+                  taskId: taskId.toNumber(),
+                  taskTitle: task.title,
+                  taskDescription: task.description,
+                  compensation: task.compensation.toNumber(),
+                  status: task.isComplete ? "Completed" : "In Progress",
+                  assignedTo:
+                    task.assignedTo === ethers.constants.AddressZero
+                      ? "Not Assigned"
+                      : task.assignedTo,
+                  evidence: task.evidence,
+                };
+              })
+            )
+          );
+          setLoading(false);
+        });
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    setLoading(false);
+  }, [signer, jobAddr, taskContract]);
 
-  // const getTaskList = useCallback(() => {
-  //   setLoading(true);
-  //   if (taskContract && signer) {
-  //     // get task list
-  //     const jobContract = Job__factory.connect(jobAddr, signer);
-  //     const taskAddresses = await jobContract.tasks;
-
-  //     const transferLogFilter = jobCreatorContract.filters.JobDeployed(
-  //       null,
-  //       address
-  //     );
-  //     jobCreatorContract
-  //       .queryFilter(transferLogFilter, 0)
-  //       .then(async (eventList) => {
-  //         setRows(
-  //           await Promise.all(
-  //             eventList.map((event) => {
-  //               const address = event.args.jobAddress;
-  //               const contract = Job__factory.connect(address, signer);
-  //               return getTaskData(address, contract);
-  //             })
-  //           )
-  //         );
-  //       });
-  //   }
-  //   setLoading(false);
-  // }, [address, jobCreatorContract, signer]);
-
-  // useEffect(() => {
-  //   getTaskList();
-  // }, [getTaskList]);
+  useEffect(() => {
+    getTaskList();
+  }, [getTaskList]);
 
   const ViewCell: React.FunctionComponent<ViewCellProps> = ({
     row,
@@ -229,19 +229,6 @@ const ViewTasks: React.FunctionComponent = () => {
     },
   ];
 
-  const rows = [
-    {
-      id: 1,
-      taskId: 1,
-      taskTitle: "ABC Company",
-      taskDescription: "ABC Company",
-      compensation: 10,
-      status: "Pending",
-      assignedTo: "0xfC16D162C6a9Ff85346cB42176428c26278F09D1",
-      evidence: "https://www.google.com.sg",
-    },
-  ];
-
   return (
     <React.Fragment>
       <AddTask
@@ -300,6 +287,7 @@ const ViewTasks: React.FunctionComponent = () => {
           components={{
             Toolbar: GridToolbar,
           }}
+          loading={loading}
         />
       </div>
     </React.Fragment>

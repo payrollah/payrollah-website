@@ -86,9 +86,9 @@ const Jobs: React.FunctionComponent = () => {
               })
             )
           );
+          setLoading(false);
         });
     }
-    setLoading(false);
   }, [address, jobCreatorContract, signer]);
 
   useEffect(() => {
