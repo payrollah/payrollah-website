@@ -79,6 +79,7 @@ const Menubar: React.FunctionComponent = () => {
     setCompanyId,
     setWorkerId,
     setAddress,
+    setDomain,
   } = useContext(UserContext);
 
   const handleLogout = async () => {
@@ -110,6 +111,7 @@ const Menubar: React.FunctionComponent = () => {
       setCompanyId(0);
       setWorkerId(0);
       setAddress("");
+      setDomain("");
     }
   };
 

@@ -15,6 +15,7 @@ import {
 } from "@material-ui/data-grid";
 import PeopleIcon from "@material-ui/icons/People";
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
+import ThumbDownIcon from "@material-ui/icons/ThumbDown";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import WorkIcon from "@material-ui/icons/Work";
@@ -23,6 +24,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import DoneIcon from "@material-ui/icons/Done";
 import AddTask from "./AddTask/AddTask";
 import ApproveTask from "./ApproveTask/ApproveTask";
+import RejectTask from "./RejectTask/RejectTask";
 import { useLocation, useParams } from "react-router";
 import EtherContext from "../../contexts/EtherContext";
 import { Job__factory } from "@payrollah/payrollah-registry";
@@ -44,6 +46,10 @@ interface LinkCellProps {
 }
 
 interface ApproveCellProps {
+  row: GridRowModel;
+}
+
+interface RejectCellProps {
   row: GridRowModel;
 }
 
@@ -72,6 +78,9 @@ const ViewTasks: React.FunctionComponent = () => {
 
   const [approveTaskOpen, setApproveTaskOpen] = useState(false);
   const [taskIdToApprove, setTaskIdToApprove] = useState(0);
+
+  const [rejectTaskOpen, setRejectTaskOpen] = useState(false);
+  const [taskIdToReject, setTaskIdToReject] = useState(0);
 
   const [rows, setRows] = useState<GridRowModel[]>([]);
   const [loading, setLoading] = useState(false);
@@ -172,16 +181,51 @@ const ViewTasks: React.FunctionComponent = () => {
     row,
   }: ApproveCellProps) => {
     if (row.isComplete === false) {
-      return (
-        <IconButton
-          onClick={() => {
-            setTaskIdToApprove(row.taskId);
-            setApproveTaskOpen(true);
-          }}
-        >
-          <ThumbUpIcon />
-        </IconButton>
-      );
+      if (!!row.evidence) {
+        return (
+          <IconButton
+            onClick={() => {
+              setTaskIdToApprove(row.taskId);
+              setApproveTaskOpen(true);
+            }}
+          >
+            <ThumbUpIcon />
+          </IconButton>
+        );
+      } else {
+        return (
+          <IconButton disabled={true}>
+            <ThumbUpIcon />
+          </IconButton>
+        );
+      }
+    } else {
+      return <DoneIcon style={{ width: "100%" }} />;
+    }
+  };
+
+  const RejectCell: React.FunctionComponent<RejectCellProps> = ({
+    row,
+  }: RejectCellProps) => {
+    if (row.isComplete === false) {
+      if (!!row.evidence) {
+        return (
+          <IconButton
+            onClick={() => {
+              setTaskIdToReject(row.taskId);
+              setRejectTaskOpen(true);
+            }}
+          >
+            <ThumbDownIcon />
+          </IconButton>
+        );
+      } else {
+        return (
+          <IconButton disabled={true}>
+            <ThumbDownIcon />
+          </IconButton>
+        );
+      }
     } else {
       return <DoneIcon style={{ width: "100%" }} />;
     }
@@ -241,11 +285,21 @@ const ViewTasks: React.FunctionComponent = () => {
     },
     {
       field: "complete",
-      width: 70,
+      width: 80,
       sortable: false,
-      headerName: "Done",
+      headerName: "Accept",
       // eslint-disable-next-line react/display-name
       renderCell: (params: GridCellParams) => <ApproveCell row={params.row} />,
+      disableColumnMenu: true,
+      disableClickEventBubbling: true,
+    },
+    {
+      field: "reject",
+      width: 80,
+      sortable: false,
+      headerName: "Reject",
+      // eslint-disable-next-line react/display-name
+      renderCell: (params: GridCellParams) => <RejectCell row={params.row} />,
       disableColumnMenu: true,
       disableClickEventBubbling: true,
     },
@@ -262,6 +316,12 @@ const ViewTasks: React.FunctionComponent = () => {
         open={approveTaskOpen}
         onClose={() => setApproveTaskOpen(false)}
         taskId={taskIdToApprove}
+        jobAddr={jobAddr}
+      />
+      <RejectTask
+        open={rejectTaskOpen}
+        onClose={() => setRejectTaskOpen(false)}
+        taskId={taskIdToReject}
         jobAddr={jobAddr}
       />
       <Container

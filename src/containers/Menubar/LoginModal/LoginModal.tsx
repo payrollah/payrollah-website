@@ -39,6 +39,7 @@ const LoginModal: React.FunctionComponent<Props> = ({
   const [isCompanyValue, setIsCompanyValue] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const [error2, setError2] = useState(false);
 
   const {
     provider,
@@ -62,6 +63,7 @@ const LoginModal: React.FunctionComponent<Props> = ({
     if (!!provider) {
       setLoading(true);
       setError(false);
+      setError2(false);
 
       await (window as any).ethereum.send("eth_requestAccounts");
       const signer = provider.getSigner();
@@ -97,12 +99,20 @@ const LoginModal: React.FunctionComponent<Props> = ({
             address
           );
 
-          setCompanyId(companyId.toNumber());
-          setIsCompany(true);
+          const activeStatus = await companyContract.isActiveCompany(companyId);
+          // console.log(activeStatus);
+          if (activeStatus === true) {
+            setCompanyId(companyId.toNumber());
+            setIsCompany(true);
 
-          const company = await companyContract.companies(companyId);
-          setName(company.name);
-          setDomain(company.domain);
+            const company = await companyContract.companies(companyId);
+            setName(company.name);
+            setDomain(company.domain);
+            setAddress(address);
+            onClose();
+          } else {
+            setError2(true);
+          }
         } else {
           const workerId = await workerContract.getWorkerIdByAddress(address);
 
@@ -110,9 +120,9 @@ const LoginModal: React.FunctionComponent<Props> = ({
           setIsCompany(false);
           setName("");
           setDomain("");
+          setAddress(address);
+          onClose();
         }
-        setAddress(address);
-        onClose();
       } catch (e) {
         console.error(e);
         setError(true);
@@ -157,6 +167,11 @@ const LoginModal: React.FunctionComponent<Props> = ({
         {error && (
           <DialogContentText color="error" align="center">
             User not found!
+          </DialogContentText>
+        )}
+        {error2 && (
+          <DialogContentText color="error" align="center">
+            User has been disabled!
           </DialogContentText>
         )}
         <DialogContentText variant="body2">

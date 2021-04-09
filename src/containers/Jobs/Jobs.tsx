@@ -16,6 +16,7 @@ import {
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import WorkIcon from "@material-ui/icons/Work";
+import DoneIcon from "@material-ui/icons/Done";
 import CreateJob from "./CreateJob/CreateJob";
 import CompleteJob from "./CompleteJob/CompleteJob";
 import EtherContext from "../../contexts/EtherContext";
@@ -58,12 +59,23 @@ const Jobs: React.FunctionComponent = () => {
   const { address } = useContext(UserContext);
 
   const getJobData = async (address: string, contract: Job) => {
+    const jobStatus = await contract.status();
+
+    let statusEnum = "";
+    if (jobStatus === 1) {
+      statusEnum = "Created";
+    } else if (jobStatus === 2) {
+      statusEnum = "In Progress";
+    } else {
+      statusEnum = "Completed";
+    }
+
     return {
       id: address,
       jobAddr: address,
       jobTitle: await contract.title(),
       jobDescription: await contract.description(),
-      status: await contract.status(),
+      status: statusEnum,
     };
   };
 
@@ -117,16 +129,20 @@ const Jobs: React.FunctionComponent = () => {
   const CompleteCell: React.FunctionComponent<CompleteCellProps> = ({
     row,
   }: CompleteCellProps) => {
-    return (
-      <IconButton
-        onClick={() => {
-          setJobAddrToComplete(row.jobAddr);
-          setCompleteJobOpen(true);
-        }}
-      >
-        <ThumbUpIcon />
-      </IconButton>
-    );
+    if (row.status !== "Completed") {
+      return (
+        <IconButton
+          onClick={() => {
+            setJobAddrToComplete(row.jobAddr);
+            setCompleteJobOpen(true);
+          }}
+        >
+          <ThumbUpIcon />
+        </IconButton>
+      );
+    } else {
+      return <DoneIcon style={{ width: "100%" }} />;
+    }
   };
 
   const columns: GridColDef[] = [
@@ -148,13 +164,6 @@ const Jobs: React.FunctionComponent = () => {
       field: "jobDescription",
       headerName: "Job Description",
       width: 330,
-      disableClickEventBubbling: true,
-    },
-    {
-      field: "numRemainingTasks",
-      headerName: "Remaining Tasks",
-      width: 165,
-      type: "number",
       disableClickEventBubbling: true,
     },
     {
