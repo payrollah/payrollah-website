@@ -18,7 +18,6 @@ import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import AddCandidate from "./AddCandidate/AddCandidate";
 import { Job__factory } from "@payrollah/payrollah-registry";
 import { Job } from "@payrollah/payrollah-registry/dist/ts/contracts";
-import UserContext from "../../contexts/UserContext";
 import EtherContext from "../../contexts/EtherContext";
 import { BigNumber } from "@ethersproject/bignumber";
 import { flatten } from "lodash";
@@ -52,37 +51,39 @@ const JobList: React.FunctionComponent = () => {
     companyContract,
     signer,
   } = useContext(EtherContext);
-  const { address } = useContext(UserContext);
 
-  const getJobData = async (jobAddr: string, contract: Job) => {
-    if (!taskContract || !companyContract) return [];
+  const getJobData = useCallback(
+    async (jobAddr: string, contract: Job) => {
+      if (!taskContract || !companyContract) return [];
 
-    return await contract.getTasks().then(async (taskIds: BigNumber[]) => {
-      return await Promise.all(
-        taskIds.map(async (taskId) => {
-          const task = await taskContract.tasks(taskId);
-          return {
-            id: taskId.toNumber(),
-            jobAddr: jobAddr,
-            company: (
-              await contract
-                .jobOwner()
-                .then((ownerAddr) =>
-                  companyContract.getCompanyIdByAddress(ownerAddr)
-                )
-                .then((companyId) => companyContract.companies(companyId))
-            ).name,
-            jobTitle: await contract.title(),
-            jobDescription: await contract.description(),
-            taskId: taskId.toNumber(),
-            taskTitle: task.title,
-            taskDescription: task.description,
-            compensation: task.compensation.toNumber(),
-          };
-        })
-      );
-    });
-  };
+      return await contract.getTasks().then(async (taskIds: BigNumber[]) => {
+        return await Promise.all(
+          taskIds.map(async (taskId) => {
+            const task = await taskContract.tasks(taskId);
+            return {
+              id: taskId.toNumber(),
+              jobAddr: jobAddr,
+              company: (
+                await contract
+                  .jobOwner()
+                  .then((ownerAddr) =>
+                    companyContract.getCompanyIdByAddress(ownerAddr)
+                  )
+                  .then((companyId) => companyContract.companies(companyId))
+              ).name,
+              jobTitle: await contract.title(),
+              jobDescription: await contract.description(),
+              taskId: taskId.toNumber(),
+              taskTitle: task.title,
+              taskDescription: task.description,
+              compensation: task.compensation.toNumber(),
+            };
+          })
+        );
+      });
+    },
+    [companyContract, taskContract]
+  );
 
   const getJobList = useCallback(() => {
     setLoading(true);
@@ -108,7 +109,7 @@ const JobList: React.FunctionComponent = () => {
           setLoading(false);
         });
     }
-  }, [address, jobCreatorContract, signer]);
+  }, [jobCreatorContract, signer, getJobData, taskContract]);
 
   useEffect(() => {
     getJobList();

@@ -9,7 +9,6 @@ import {
 } from "@material-ui/core";
 import React, { useContext } from "react";
 import "./Sidebar.css";
-import GroupIcon from "@material-ui/icons/Group";
 import WorkIcon from "@material-ui/icons/Work";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import AccountBoxIcon from "@material-ui/icons/AccountBox";
@@ -20,8 +19,6 @@ import {
   TASKLIST,
   COMPANYPROFILE,
   WORKERPROFILE,
-  VIEWTASKS,
-  VIEWCANDIDATES,
 } from "../../constants/routePaths";
 import UserContext from "../../contexts/UserContext";
 
@@ -46,16 +43,6 @@ const companyMenuList = [
     path: JOBS,
     label: "Jobs (Company)",
     icon: <WorkIcon />,
-  },
-  {
-    path: VIEWTASKS,
-    label: "Tasks (Company)",
-    icon: <AssignmentIcon />,
-  },
-  {
-    path: VIEWCANDIDATES,
-    label: "Candidates (Company)",
-    icon: <GroupIcon />,
   },
   {
     path: COMPANYPROFILE,
