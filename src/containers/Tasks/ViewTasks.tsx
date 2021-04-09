@@ -19,6 +19,7 @@ import AssignmentIcon from "@material-ui/icons/Assignment";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import WorkIcon from "@material-ui/icons/Work";
 import GetAppIcon from "@material-ui/icons/GetApp";
+import CloseIcon from "@material-ui/icons/Close";
 import AddTask from "./AddTask/AddTask";
 import ApproveTask from "./ApproveTask/ApproveTask";
 import { useLocation, useParams } from "react-router";
@@ -139,15 +140,21 @@ const ViewTasks: React.FunctionComponent = () => {
   const LinkCell: React.FunctionComponent<LinkCellProps> = ({
     row,
   }: LinkCellProps) => {
-    return (
-      <IconButton
-        onClick={() => {
-          window.open(row.evidence);
-        }}
-      >
-        <GetAppIcon />
-      </IconButton>
-    );
+    if (!!row.evidence) {
+      // Have evidence
+      return (
+        <IconButton
+          onClick={() => {
+            window.open(row.evidence);
+          }}
+        >
+          <GetAppIcon />
+        </IconButton>
+      );
+    } else {
+      // No evidence
+      return <CloseIcon style={{ width: "100%" }} />;
+    }
   };
 
   const ApproveCell: React.FunctionComponent<ApproveCellProps> = ({
@@ -190,7 +197,7 @@ const ViewTasks: React.FunctionComponent = () => {
     {
       field: "status",
       headerName: "Status",
-      width: 100,
+      width: 120,
       disableClickEventBubbling: true,
     },
     {
@@ -206,7 +213,7 @@ const ViewTasks: React.FunctionComponent = () => {
     {
       field: "assignedTo",
       headerName: "Hiree",
-      width: 100,
+      width: 120,
       disableClickEventBubbling: true,
     },
     {

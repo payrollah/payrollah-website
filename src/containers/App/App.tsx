@@ -65,6 +65,7 @@ const App: React.FunctionComponent = () => {
   const [companyId, setCompanyId] = useState<number>();
   const [workerId, setWorkerId] = useState<number>();
   const [address, setAddress] = useState("");
+  const [domain, setDomain] = useState("");
 
   useEffect(() => {
     const { ethereum } = window as any;
@@ -126,11 +127,13 @@ const App: React.FunctionComponent = () => {
             companyId,
             workerId,
             address,
+            domain,
             setName,
             setIsCompany,
             setCompanyId,
             setWorkerId,
             setAddress,
+            setDomain,
           }}
         >
           <ThemeProvider theme={theme}>

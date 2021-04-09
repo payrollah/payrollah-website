@@ -13,12 +13,13 @@ import {
   GridToolbar,
   GridRowModel,
 } from "@material-ui/data-grid";
-// import AssignmentIcon from "@material-ui/icons/Assignment";
+import NotInterestedIcon from "@material-ui/icons/NotInterested";
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import AddCandidate from "./AddCandidate/AddCandidate";
 import { Job__factory } from "@payrollah/payrollah-registry";
 import { Job } from "@payrollah/payrollah-registry/dist/ts/contracts";
 import EtherContext from "../../contexts/EtherContext";
+import UserContext from "../../contexts/UserContext";
 import { BigNumber } from "@ethersproject/bignumber";
 import { flatten } from "lodash";
 
@@ -45,6 +46,8 @@ const JobList: React.FunctionComponent = () => {
   const [rows, setRows] = useState<GridRowModel[]>([]);
   const [loading, setLoading] = useState(false);
 
+  const { address } = useContext(UserContext);
+
   const {
     jobCreatorContract,
     taskContract,
@@ -60,6 +63,11 @@ const JobList: React.FunctionComponent = () => {
         return await Promise.all(
           taskIds.map(async (taskId) => {
             const task = await taskContract.tasks(taskId);
+            const isCandidate = await taskContract.isCandidate(
+              taskId.toNumber(),
+              address
+            );
+
             return {
               id: taskId.toNumber(),
               jobAddr: jobAddr,
@@ -77,12 +85,15 @@ const JobList: React.FunctionComponent = () => {
               taskTitle: task.title,
               taskDescription: task.description,
               compensation: task.compensation.toNumber(),
+              assignedTo: task.assignedTo,
+              isComplete: task.isComplete,
+              isCandidate: isCandidate,
             };
           })
         );
       });
     },
-    [companyContract, taskContract]
+    [companyContract, taskContract, address]
   );
 
   const getJobList = useCallback(() => {
@@ -118,17 +129,23 @@ const JobList: React.FunctionComponent = () => {
   const AddCell: React.FunctionComponent<AddCellProps> = ({
     row,
   }: AddCellProps) => {
-    return (
-      <IconButton
-        onClick={() => {
-          setTaskIdToAdd(row.taskId);
-          setJobAddrToAdd(row.jobAddr);
-          setAddCandidateOpen(true);
-        }}
-      >
-        <ThumbUpIcon />
-      </IconButton>
-    );
+    if (Number(row.assignedTo) !== 0 || row.isComplete || row.isCandidate) {
+      // Assigned or completed
+      return <NotInterestedIcon style={{ width: "100%" }} />;
+    } else {
+      // Available to apply
+      return (
+        <IconButton
+          onClick={() => {
+            setTaskIdToAdd(row.taskId);
+            setJobAddrToAdd(row.jobAddr);
+            setAddCandidateOpen(true);
+          }}
+        >
+          <ThumbUpIcon />
+        </IconButton>
+      );
+    }
   };
 
   const columns: GridColDef[] = [
@@ -180,7 +197,7 @@ const JobList: React.FunctionComponent = () => {
     },
     {
       field: "add",
-      width: 70,
+      width: 80,
       sortable: false,
       headerName: "Apply",
       // eslint-disable-next-line react/display-name
@@ -199,7 +216,7 @@ const JobList: React.FunctionComponent = () => {
         jobAddr={jobAddrToAdd}
       />
       <Typography variant="h3" gutterBottom>
-        Available Jobs
+        Jobs
       </Typography>
       <div style={{ height: 400, width: "100%", textAlign: "center" }}>
         <DataGrid

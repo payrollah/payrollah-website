@@ -1,8 +1,9 @@
 import { Button, Container, makeStyles, Typography } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import ViewWorkerProfile from "../Tasks/ViewCandidates/ViewWorkerProfile/ViewWorkerProfile";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import FaceIcon from "@material-ui/icons/Face";
+import UserContext from "../../contexts/UserContext";
 
 const useStyles = makeStyles((theme) => ({
   buttonContainer: {
@@ -23,12 +24,11 @@ const useStyles = makeStyles((theme) => ({
 const WorkerProfile: React.FunctionComponent = () => {
   const classes = useStyles();
 
-  const workerAddr = "0xfC16D162C6a9Ff85346cB42176428c26278F09D1";
-  const workerId = 999;
+  const { address, workerId } = useContext(UserContext);
 
   const [viewWorkerProfileOpen, setViewWorkerProfileOpen] = useState(false);
-  const [workerAddrToView] = useState(workerAddr);
-  const [workerIdToView] = useState(10);
+  const [workerAddrToView] = useState(address);
+  const [workerIdToView] = useState(Number(workerId));
 
   return (
     <React.Fragment>
@@ -65,7 +65,7 @@ const WorkerProfile: React.FunctionComponent = () => {
           </tr>
           <tr className={classes.tr}>
             <td className={classes.td}>Account Address</td>
-            <td className={classes.td}>{workerAddr}</td>
+            <td className={classes.td}>{address}</td>
           </tr>
         </table>
       </div>
