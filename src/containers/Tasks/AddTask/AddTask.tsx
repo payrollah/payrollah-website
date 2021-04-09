@@ -1,3 +1,4 @@
+import { formatEther, parseUnits } from "@ethersproject/units";
 import {
   Button,
   Dialog,
@@ -63,7 +64,10 @@ const AddTask: React.FunctionComponent<Props> = ({
               await jobContract.addTask(
                 values.taskTitle,
                 values.taskDescription,
-                values.compensation
+                values.compensation,
+                {
+                  value: parseUnits(formatEther(values.compensation)),
+                }
               );
               onClose();
             } catch (e) {
