@@ -1,6 +1,6 @@
 import { makeStyles, Toolbar } from "@material-ui/core";
 import React from "react";
-import { Route, Switch } from "react-router-dom";
+import { Redirect, Route, RouteComponentProps, Switch } from "react-router-dom";
 import { VERIFY_DOCS, ROOT } from "../../constants/routePaths";
 import VerifyDocumentation from "../Verify/VerifyDocumentation";
 import Menubar from "../Menubar/Menubar";
@@ -22,7 +22,12 @@ const Routes: React.FunctionComponent = () => {
     <div>
       <Switch>
         <Route path={VERIFY_DOCS} component={VerifyDocumentation} />
-        <Route path={ROOT} component={Home} />
+        <Route
+          path={ROOT}
+          render={(props: RouteComponentProps) =>
+            !props.match.isExact ? <Redirect to={ROOT} /> : <Home />
+          }
+        />
       </Switch>
     </div>
   );
