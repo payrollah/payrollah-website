@@ -23,6 +23,8 @@ import {
 } from "@payrollah/payrollah-registry";
 import EtherContext from "../../../contexts/EtherContext";
 import UserContext from "../../../contexts/UserContext";
+import { useHistory } from "react-router";
+import { ROOT } from "../../../constants/routePaths";
 
 interface Props {
   open: boolean;
@@ -56,6 +58,8 @@ const DisableCompany: React.FunctionComponent<Props> = ({
     setAddress,
     setDomain,
   } = useContext(UserContext);
+
+  const history = useHistory();
 
   const handleLogout = async () => {
     if (!!provider) {
@@ -104,7 +108,7 @@ const DisableCompany: React.FunctionComponent<Props> = ({
               await companyContract.disableCompany(companyId);
               handleLogout();
               onClose();
-              window.location.href = "/";
+              history.push(ROOT);
             }
           } catch (e) {
             console.error(e);
