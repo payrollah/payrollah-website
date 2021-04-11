@@ -35,6 +35,7 @@ interface Props {
 const LoginModal: React.FunctionComponent<Props> = ({
   open,
   onClose,
+  onClickSignUp,
 }: Props) => {
   const [isCompanyValue, setIsCompanyValue] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -176,7 +177,7 @@ const LoginModal: React.FunctionComponent<Props> = ({
         )}
         <DialogContentText variant="body2">
           {"Don't have an account? "}
-          <Link>Sign Up</Link>
+          <Link onClick={onClickSignUp}>Sign Up</Link>
         </DialogContentText>
       </DialogContent>
     </Dialog>
