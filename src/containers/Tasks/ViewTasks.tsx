@@ -33,7 +33,7 @@ import { Link } from "react-router-dom";
 import formatPath from "../../utils/formatPath";
 import { BigNumber } from "@ethersproject/bignumber";
 import { ethers } from "ethers";
-import axios from "axios";
+import ImageModal from "./ImageModal/ImageModal";
 
 interface ViewTaskParams {
   jobAddr: string;
@@ -83,6 +83,9 @@ const ViewTasks: React.FunctionComponent = () => {
 
   const [rejectTaskOpen, setRejectTaskOpen] = useState(false);
   const [taskIdToReject, setTaskIdToReject] = useState(0);
+
+  const [imageOpen, setImageOpen] = useState(false);
+  const [taskIdImg, setTaskIdImg] = useState(0);
 
   const [rows, setRows] = useState<GridRowModel[]>([]);
   const [loading, setLoading] = useState(false);
@@ -182,9 +185,8 @@ const ViewTasks: React.FunctionComponent = () => {
         return (
           <IconButton
             onClick={() => {
-              window.open(
-                `https://payrollah.herokuapp.com/work/getImage/${jobAddr}/${row.taskId}`
-              );
+              setTaskIdImg(row.taskId);
+              setImageOpen(true);
             }}
           >
             <GetAppIcon />
@@ -342,6 +344,12 @@ const ViewTasks: React.FunctionComponent = () => {
         open={rejectTaskOpen}
         onClose={() => setRejectTaskOpen(false)}
         taskId={taskIdToReject}
+        jobAddr={jobAddr}
+      />
+      <ImageModal
+        open={imageOpen}
+        taskId={taskIdImg}
+        onClose={() => setImageOpen(false)}
         jobAddr={jobAddr}
       />
       <Container
