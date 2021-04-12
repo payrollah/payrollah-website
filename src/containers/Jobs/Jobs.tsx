@@ -157,13 +157,13 @@ const Jobs: React.FunctionComponent = () => {
     {
       field: "jobTitle",
       headerName: "Job Title",
-      width: 220,
+      flex: 1,
       disableClickEventBubbling: true,
     },
     {
       field: "jobDescription",
       headerName: "Job Description",
-      width: 330,
+      flex: 2,
       disableClickEventBubbling: true,
     },
     {
@@ -222,9 +222,10 @@ const Jobs: React.FunctionComponent = () => {
       </Container>
       <div style={{ height: 400, width: "100%", textAlign: "center" }}>
         <DataGrid
+          autoHeight={true}
           rows={rows}
           columns={columns}
-          pageSize={5}
+          pageSize={10}
           components={{
             Toolbar: GridToolbar,
           }}

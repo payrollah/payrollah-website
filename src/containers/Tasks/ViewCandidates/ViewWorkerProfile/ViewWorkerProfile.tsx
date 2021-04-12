@@ -113,11 +113,11 @@ const ViewWorkerProfile: React.FunctionComponent<Props> = ({
   };
 
   const columns: GridColDef[] = [
-    { field: "id", headerName: "ID", width: 70 },
+    { field: "id", headerName: "ID", flex: 0.6 },
     {
       field: "taskTitle",
       headerName: "Task Title",
-      width: 330,
+      flex: 3,
       disableClickEventBubbling: true,
     },
     {
@@ -137,11 +137,12 @@ const ViewWorkerProfile: React.FunctionComponent<Props> = ({
         <Typography gutterBottom>Worker Address: {workerAddrToView}</Typography>
       </DialogContent>
       <DialogContent dividers>
-        <div style={{ height: 400, width: "100%", textAlign: "center" }}>
+        <div style={{ height: "auto", width: "100%", textAlign: "center" }}>
           <DataGrid
+            autoHeight={true}
             rows={rows}
             columns={columns}
-            pageSize={5}
+            pageSize={10}
             loading={loading}
           />
         </div>

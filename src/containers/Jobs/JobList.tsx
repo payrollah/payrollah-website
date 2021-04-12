@@ -154,6 +154,7 @@ const JobList: React.FunctionComponent = () => {
       field: "company",
       headerName: "Company",
       width: 220,
+      resizable: true,
       disableClickEventBubbling: true,
     },
     {
@@ -220,9 +221,10 @@ const JobList: React.FunctionComponent = () => {
       </Typography>
       <div style={{ height: 400, width: "100%", textAlign: "center" }}>
         <DataGrid
+          autoHeight={true}
           rows={rows}
           columns={columns}
-          pageSize={5}
+          pageSize={10}
           components={{
             Toolbar: GridToolbar,
           }}
