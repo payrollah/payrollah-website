@@ -26,7 +26,7 @@ import {
   Worker__factory,
 } from "@payrollah/payrollah-registry";
 import EtherContext from "../../contexts/EtherContext";
-import logo from "../../payrollah_logo.png"; // with import
+import logo from "../../payrollah_logo_without_name.png"; // with import
 import {
   COMPANYPROFILE,
   ROOT,
