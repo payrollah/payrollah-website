@@ -30,6 +30,15 @@ import UserContext from "../../contexts/UserContext";
 import AppNavigatorAnonymous from "../AppNavigatorAnonymous/AppNavigatorAnonymous";
 
 const theme = createMuiTheme({
+  typography: {
+    fontFamily: "'Poppins', sans-serif;",
+  },
+  palette: {
+    primary: {
+      main: "rgb(49,201,104)",
+      contrastText: "rgb(38,50,56)",
+    },
+  },
   overrides: {
     MuiTextField: {
       root: {
