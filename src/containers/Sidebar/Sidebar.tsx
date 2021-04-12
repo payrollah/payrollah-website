@@ -35,18 +35,22 @@ const useStyles = makeStyles((theme) => ({
   drawerContainer: {
     overflow: "auto",
   },
+  link: {
+    textDecoration: "none",
+    color: "initial",
+  },
 }));
 
 // List of menu for company
 const companyMenuList = [
   {
     path: JOBS,
-    label: "Jobs (Company)",
+    label: "Jobs Posted",
     icon: <WorkIcon />,
   },
   {
     path: COMPANYPROFILE,
-    label: "Profile (Company)",
+    label: "Profile",
     icon: <AccountBoxIcon />,
   },
 ];
@@ -55,17 +59,17 @@ const companyMenuList = [
 const workerMenuList = [
   {
     path: JOBLIST,
-    label: "Jobs (Worker)",
+    label: "Available Jobs",
     icon: <WorkIcon />,
   },
   {
     path: TASKLIST,
-    label: "Tasks (Worker)",
+    label: "Your Tasks",
     icon: <AssignmentIcon />,
   },
   {
     path: WORKERPROFILE,
-    label: "Profile (Worker)",
+    label: "Profile",
     icon: <AccountBoxIcon />,
   },
 ];
@@ -86,7 +90,7 @@ const Sidebar: React.FunctionComponent = () => {
       <div className={classes.drawerContainer}>
         <List>
           {(isCompany ? companyMenuList : workerMenuList).map((menu) => (
-            <Link to={menu.path} key={menu.path}>
+            <Link to={menu.path} key={menu.path} className={classes.link}>
               <ListItem button>
                 <ListItemIcon>{menu.icon}</ListItemIcon>
                 <ListItemText primary={menu.label} />

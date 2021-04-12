@@ -185,9 +185,7 @@ const LoginModal: React.FunctionComponent<Props> = ({
             <DialogContent>
               <InputLabel htmlFor="isCompany">
                 <Field name="isCompany" component={Switch} color="primary" />
-                {values.isCompany
-                  ? "Register as Company"
-                  : "Register as Worker"}
+                {values.isCompany ? "Login as Company" : "Login as Worker"}
               </InputLabel>
               {values.isCompany && (
                 <Field
