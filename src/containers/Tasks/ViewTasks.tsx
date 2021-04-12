@@ -34,6 +34,7 @@ import formatPath from "../../utils/formatPath";
 import { BigNumber } from "@ethersproject/bignumber";
 import { ethers } from "ethers";
 import ImageModal from "./ImageModal/ImageModal";
+import { ExternalLinkEtherscanAddress } from "./ExternalLink";
 
 interface ViewTaskParams {
   jobAddr: string;
@@ -90,6 +91,10 @@ const ViewTasks: React.FunctionComponent = () => {
   const [rows, setRows] = useState<GridRowModel[]>([]);
   const [loading, setLoading] = useState(false);
 
+  const [count, setCount] = useState(0);
+
+  const handleUpdate = () => setCount(count + 1);
+
   const getTaskList = useCallback(() => {
     setLoading(true);
     if (taskContract && signer) {
@@ -129,7 +134,7 @@ const ViewTasks: React.FunctionComponent = () => {
 
   useEffect(() => {
     getTaskList();
-  }, [getTaskList]);
+  }, [getTaskList, count]);
 
   const ViewCell: React.FunctionComponent<ViewCellProps> = ({
     row,
@@ -333,18 +338,21 @@ const ViewTasks: React.FunctionComponent = () => {
         open={addTaskOpen}
         onClose={() => setAddTaskOpen(false)}
         jobAddr={jobAddr}
+        onUpdate={handleUpdate}
       />
       <ApproveTask
         open={approveTaskOpen}
         onClose={() => setApproveTaskOpen(false)}
         taskId={taskIdToApprove}
         jobAddr={jobAddr}
+        onUpdate={handleUpdate}
       />
       <RejectTask
         open={rejectTaskOpen}
         onClose={() => setRejectTaskOpen(false)}
         taskId={taskIdToReject}
         jobAddr={jobAddr}
+        onUpdate={handleUpdate}
       />
       <ImageModal
         open={imageOpen}
@@ -373,7 +381,8 @@ const ViewTasks: React.FunctionComponent = () => {
         </Link>
       </Container>
       <Typography variant="subtitle1" gutterBottom>
-        Job Address: {jobAddr}
+        Job Address:{" "}
+        <ExternalLinkEtherscanAddress name={jobAddr} address={jobAddr} />
       </Typography>
       <Container
         disableGutters

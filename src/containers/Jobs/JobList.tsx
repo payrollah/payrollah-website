@@ -22,6 +22,10 @@ import EtherContext from "../../contexts/EtherContext";
 import UserContext from "../../contexts/UserContext";
 import { BigNumber } from "@ethersproject/bignumber";
 import { flatten } from "lodash";
+import { Link } from "react-router-dom";
+import formatPath from "../../utils/formatPath";
+import { VIEW_COMPANY } from "../../constants/routePaths";
+import { ethers } from "ethers";
 
 // const useStyles = makeStyles((theme) => ({
 //   buttonContainer: {
@@ -36,6 +40,11 @@ interface AddCellProps {
   row: GridRowModel;
 }
 
+interface CompanyCellProps {
+  row: GridRowModel;
+  value: any;
+}
+
 const JobList: React.FunctionComponent = () => {
   // const classes = useStyles();
 
@@ -45,6 +54,10 @@ const JobList: React.FunctionComponent = () => {
 
   const [rows, setRows] = useState<GridRowModel[]>([]);
   const [loading, setLoading] = useState(false);
+
+  const [count, setCount] = useState(0);
+
+  const handleUpdate = () => setCount(count + 1);
 
   const { address } = useContext(UserContext);
 
@@ -68,17 +81,17 @@ const JobList: React.FunctionComponent = () => {
               address
             );
 
+            const companyId = await contract
+              .jobOwner()
+              .then((ownerAddr) =>
+                companyContract.getCompanyIdByAddress(ownerAddr)
+              );
+
             return {
               id: taskId.toNumber(),
               jobAddr: jobAddr,
-              company: (
-                await contract
-                  .jobOwner()
-                  .then((ownerAddr) =>
-                    companyContract.getCompanyIdByAddress(ownerAddr)
-                  )
-                  .then((companyId) => companyContract.companies(companyId))
-              ).name,
+              companyId,
+              company: (await companyContract.companies(companyId)).name,
               jobTitle: await contract.title(),
               jobDescription: await contract.description(),
               taskId: taskId.toNumber(),
@@ -115,7 +128,7 @@ const JobList: React.FunctionComponent = () => {
                   return getJobData(address, contract);
                 })
               )
-            )
+            ).filter((row) => row.assignedTo === ethers.constants.AddressZero)
           );
           setLoading(false);
         });
@@ -124,7 +137,7 @@ const JobList: React.FunctionComponent = () => {
 
   useEffect(() => {
     getJobList();
-  }, [getJobList]);
+  }, [getJobList, count]);
 
   const AddCell: React.FunctionComponent<AddCellProps> = ({
     row,
@@ -148,6 +161,17 @@ const JobList: React.FunctionComponent = () => {
     }
   };
 
+  const CompanyCell: React.FunctionComponent<CompanyCellProps> = ({
+    row,
+    value,
+  }: CompanyCellProps) => {
+    return (
+      <Link to={formatPath(VIEW_COMPANY, { companyId: row.companyId })}>
+        {value}
+      </Link>
+    );
+  };
+
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 70, hide: true },
     {
@@ -156,6 +180,10 @@ const JobList: React.FunctionComponent = () => {
       width: 220,
       resizable: true,
       disableClickEventBubbling: true,
+      // eslint-disable-next-line react/display-name
+      renderCell: (params: GridCellParams) => (
+        <CompanyCell row={params.row} value={params.value} />
+      ),
     },
     {
       field: "jobAddr",
@@ -215,6 +243,7 @@ const JobList: React.FunctionComponent = () => {
         onClose={() => setAddCandidateOpen(false)}
         taskId={taskIdToAdd}
         jobAddr={jobAddrToAdd}
+        onUpdate={handleUpdate}
       />
       <Typography variant="h3" gutterBottom>
         Jobs

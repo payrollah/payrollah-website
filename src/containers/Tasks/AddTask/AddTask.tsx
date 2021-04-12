@@ -21,12 +21,14 @@ interface Props {
   open: boolean;
   onClose: () => void;
   jobAddr: string;
+  onUpdate: () => void;
 }
 
 const AddTask: React.FunctionComponent<Props> = ({
   open,
   onClose,
   jobAddr,
+  onUpdate,
 }: Props) => {
   const { signer } = useContext(EtherContext);
 
@@ -61,7 +63,7 @@ const AddTask: React.FunctionComponent<Props> = ({
           if (signer) {
             try {
               const jobContract = Job__factory.connect(jobAddr, signer);
-              await jobContract.addTask(
+              const add = await jobContract.addTask(
                 values.taskTitle,
                 values.taskDescription,
                 values.compensation,
@@ -69,6 +71,8 @@ const AddTask: React.FunctionComponent<Props> = ({
                   value: parseUnits(formatEther(values.compensation)),
                 }
               );
+              await add.wait();
+              onUpdate();
               onClose();
             } catch (e) {
               console.error(e);

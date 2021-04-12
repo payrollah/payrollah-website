@@ -16,6 +16,7 @@ interface Props {
   open: boolean;
   onClose: () => void;
   jobAddr: string;
+  onUpdate: () => void;
 }
 
 // Call Job contract function completeJob()
@@ -24,6 +25,7 @@ const CompleteJob: React.FunctionComponent<Props> = ({
   open,
   onClose,
   jobAddr,
+  onUpdate,
 }: Props) => {
   const { signer } = useContext(EtherContext);
 
@@ -39,7 +41,9 @@ const CompleteJob: React.FunctionComponent<Props> = ({
           try {
             if (signer) {
               const jobContract = Job__factory.connect(jobAddr, signer);
-              await jobContract.completeJob();
+              const complete = await jobContract.completeJob();
+              await complete.wait();
+              onUpdate();
               onClose();
             }
           } catch (e) {

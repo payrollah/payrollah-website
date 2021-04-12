@@ -20,11 +20,13 @@ import EtherContext from "../../../contexts/EtherContext";
 interface Props {
   open: boolean;
   onClose: () => void;
+  onUpdate: () => void;
 }
 
 const CreateJob: React.FunctionComponent<Props> = ({
   open,
   onClose,
+  onUpdate,
 }: Props) => {
   const { jobCreatorContract } = useContext(EtherContext);
   const [error, setError] = useState(false);
@@ -59,13 +61,13 @@ const CreateJob: React.FunctionComponent<Props> = ({
                 values.jobTitle,
                 values.jobDescription
               );
-              console.log(create);
+              await create.wait();
             }
           } catch (e) {
             console.error(e);
             setError(true);
           }
-
+          onUpdate();
           onClose();
         }}
       >

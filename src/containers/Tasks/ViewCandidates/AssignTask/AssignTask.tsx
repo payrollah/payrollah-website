@@ -19,6 +19,7 @@ interface Props {
   taskId: number;
   workerAddr: string;
   jobAddr: string;
+  onUpdate: () => void;
 }
 // Call Job contract function assignTask(taskId, assignTo)
 
@@ -28,6 +29,7 @@ const AssignTask: React.FunctionComponent<Props> = ({
   taskId,
   workerAddr,
   jobAddr,
+  onUpdate,
 }: Props) => {
   const { signer } = useContext(EtherContext);
   return (
@@ -43,7 +45,12 @@ const AssignTask: React.FunctionComponent<Props> = ({
           if (signer) {
             try {
               const jobContract = Job__factory.connect(jobAddr, signer);
-              await jobContract.assignTask(BigNumber.from(taskId), workerAddr);
+              const assign = await jobContract.assignTask(
+                BigNumber.from(taskId),
+                workerAddr
+              );
+              await assign.wait();
+              onUpdate();
               onClose();
             } catch (e) {
               console.error(e);
