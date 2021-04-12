@@ -25,6 +25,7 @@ import { flatten } from "lodash";
 import { Link } from "react-router-dom";
 import formatPath from "../../utils/formatPath";
 import { VIEW_COMPANY } from "../../constants/routePaths";
+import { ethers } from "ethers";
 
 // const useStyles = makeStyles((theme) => ({
 //   buttonContainer: {
@@ -127,7 +128,7 @@ const JobList: React.FunctionComponent = () => {
                   return getJobData(address, contract);
                 })
               )
-            )
+            ).filter((row) => row.assignedTo === ethers.constants.AddressZero)
           );
           setLoading(false);
         });
