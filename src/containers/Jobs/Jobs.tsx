@@ -63,11 +63,11 @@ const Jobs: React.FunctionComponent = () => {
 
     let statusEnum = "";
     if (jobStatus === 1) {
-      statusEnum = "Created";
-    } else if (jobStatus === 2) {
       statusEnum = "In Progress";
-    } else {
+    } else if (jobStatus === 2) {
       statusEnum = "Completed";
+    } else {
+      statusEnum = "Created";
     }
 
     return {
@@ -129,7 +129,9 @@ const Jobs: React.FunctionComponent = () => {
   const CompleteCell: React.FunctionComponent<CompleteCellProps> = ({
     row,
   }: CompleteCellProps) => {
-    if (row.status !== "Completed") {
+    if (row.status === "Completed") {
+      return <DoneIcon style={{ width: "100%" }} />;
+    } else {
       return (
         <IconButton
           onClick={() => {
@@ -140,8 +142,6 @@ const Jobs: React.FunctionComponent = () => {
           <ThumbUpIcon />
         </IconButton>
       );
-    } else {
-      return <DoneIcon style={{ width: "100%" }} />;
     }
   };
 
@@ -169,7 +169,7 @@ const Jobs: React.FunctionComponent = () => {
     {
       field: "status",
       headerName: "Status",
-      width: 100,
+      width: 120,
       disableClickEventBubbling: true,
     },
     {

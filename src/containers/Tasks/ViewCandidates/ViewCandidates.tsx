@@ -15,7 +15,7 @@ import {
 } from "@material-ui/data-grid";
 import AccountBoxIcon from "@material-ui/icons/AccountBox";
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
-import AssignTask from "./ReassignTask/ReassignTask";
+import AssignTask from "./AssignTask/AssignTask";
 import ReassignTask from "./ReassignTask/ReassignTask";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
@@ -69,7 +69,7 @@ const ViewCandidates: React.FunctionComponent = () => {
       // get candidate list
       try {
         let isAssignedBool = false;
-        if (Number(assignedTo) !== 0) {
+        if (assignedTo !== "Not Assigned") {
           isAssignedBool = true;
         }
         taskContract
@@ -212,7 +212,7 @@ const ViewCandidates: React.FunctionComponent = () => {
     },
   ];
 
-  if (Number(assignedTo) !== 0) {
+  if (assignedTo !== "Not Assigned") {
     columns[4]["headerName"] = "Reassign";
   }
 
