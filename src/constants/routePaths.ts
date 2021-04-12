@@ -11,3 +11,4 @@ export const VERIFY_DOCS = "/docs/verify";
 export const ROOT = "/";
 export const COMPANYPROFILE = "/company";
 export const WORKERPROFILE = "/worker";
+export const VIEW_COMPANY = "/company/:companyId";
