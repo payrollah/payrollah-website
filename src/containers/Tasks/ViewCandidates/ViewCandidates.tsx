@@ -21,7 +21,7 @@ import AssignmentIcon from "@material-ui/icons/Assignment";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import CloseIcon from "@material-ui/icons/Close";
 import ReplayIcon from "@material-ui/icons/Replay";
-import ViewWorkerProfile from "./ViewWorkerProfile/ViewWorkerProfile";
+// import ViewWorkerProfile from "./ViewWorkerProfile/ViewWorkerProfile";
 import { useHistory, useLocation, useParams } from "react-router";
 import EtherContext from "../../../contexts/EtherContext";
 import { isAddress } from "@ethersproject/address";
@@ -112,9 +112,9 @@ const ViewCandidates: React.FunctionComponent = () => {
     getCandidateList();
   }, [getCandidateList]);
 
-  const [viewWorkerProfileOpen, setViewWorkerProfileOpen] = useState(false);
-  const [workerAddrToView, setWorkerAddrToView] = useState("");
-  const [workerIdToView, setWorkerIdToView] = useState(0);
+  // const [viewWorkerProfileOpen, setViewWorkerProfileOpen] = useState(false);
+  // const [workerAddrToView, setWorkerAddrToView] = useState("");
+  // const [workerIdToView, setWorkerIdToView] = useState(0);
 
   const [assignTaskOpen, setAssignTaskOpen] = useState(false);
   const [taskIdToAssign, setTaskIdToAssign] = useState(0);
@@ -213,6 +213,13 @@ const ViewCandidates: React.FunctionComponent = () => {
     },
   ];
 
+  // <ViewWorkerProfile
+  //   open={viewWorkerProfileOpen}
+  //   onClose={() => setViewWorkerProfileOpen(false)}
+  //   workerIdToView={workerIdToView}
+  //   workerAddrToView={workerAddrToView}
+  // />
+
   return (
     <React.Fragment>
       <AssignTask
@@ -228,12 +235,6 @@ const ViewCandidates: React.FunctionComponent = () => {
         taskId={taskIdToReassign}
         workerAddr={workerAddrToReassign}
         jobAddr={jobAddr}
-      />
-      <ViewWorkerProfile
-        open={viewWorkerProfileOpen}
-        onClose={() => setViewWorkerProfileOpen(false)}
-        workerIdToView={workerIdToView}
-        workerAddrToView={workerAddrToView}
       />
       <Container
         disableGutters
