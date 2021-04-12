@@ -39,8 +39,7 @@ const LoginModal: React.FunctionComponent<Props> = ({
   onClose,
   onClickSignUp,
 }: Props) => {
-  const [error, setError] = useState(false);
-  const [error2, setError2] = useState(false);
+  const [error, setError] = useState("");
 
   const {
     provider,
@@ -81,11 +80,35 @@ const LoginModal: React.FunctionComponent<Props> = ({
       }}
       onSubmit={async (values) => {
         if (!!provider) {
-          setError(false);
-          setError2(false);
+          setError("");
 
           await (window as any).ethereum.send("eth_requestAccounts");
           const signer = provider.getSigner();
+          const address = await signer.getAddress();
+
+          if (values.isCompany) {
+            // Login to backend
+            try {
+              const data = JSON.stringify({
+                companyAddress: address,
+                password: values.password,
+              });
+
+              const response = await axios({
+                method: "post",
+                url: "https://payrollah.herokuapp.com/company/login",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                data: data,
+              });
+              setJwtToken(response.data.accessToken);
+            } catch (e) {
+              setError("Wrong Password");
+              return;
+            }
+          }
+
           setSigner(signer);
 
           // replace readonly contracts with write-allowed contracts
@@ -113,8 +136,6 @@ const LoginModal: React.FunctionComponent<Props> = ({
           );
           setJobCreatorContract(jobCreatorContract);
 
-          const address = await signer.getAddress();
-
           try {
             if (values.isCompany) {
               const companyId = await companyContract.getCompanyIdByAddress(
@@ -131,32 +152,12 @@ const LoginModal: React.FunctionComponent<Props> = ({
 
                 const company = await companyContract.companies(companyId);
 
-                const data = JSON.stringify({
-                  companyAddress: address,
-                  password: "password",
-                });
-
-                await axios({
-                  method: "post",
-                  url: "https://payrollah.herokuapp.com/company/login",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  data: data,
-                })
-                  .then(function (response) {
-                    setJwtToken(response.data.accessToken);
-                  })
-                  .catch(function (error) {
-                    console.log(error);
-                  });
-
                 setName(company.name);
                 setDomain(company.domain);
                 setAddress(address);
                 onClose();
               } else {
-                setError2(true);
+                setError("User has been disabled!");
               }
             } else {
               const workerId = await workerContract.getWorkerIdByAddress(
@@ -172,7 +173,7 @@ const LoginModal: React.FunctionComponent<Props> = ({
             }
           } catch (e) {
             console.error(e);
-            setError(true);
+            setError("User Not Found");
           }
         }
       }}
@@ -215,14 +216,9 @@ const LoginModal: React.FunctionComponent<Props> = ({
               </Button>
             </DialogActions>
             <DialogContent>
-              {error && (
+              {error.length > 0 && (
                 <DialogContentText color="error" align="center">
-                  User not found!
-                </DialogContentText>
-              )}
-              {error2 && (
-                <DialogContentText color="error" align="center">
-                  User has been disabled!
+                  {error}
                 </DialogContentText>
               )}
               <DialogContentText variant="body2">
