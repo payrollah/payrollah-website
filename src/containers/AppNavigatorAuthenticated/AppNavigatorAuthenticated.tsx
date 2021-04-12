@@ -11,6 +11,7 @@ import {
   ROOT,
   COMPANYPROFILE,
   WORKERPROFILE,
+  VIEW_COMPANY,
 } from "../../constants/routePaths";
 import Jobs from "../Jobs/Jobs";
 import ViewTasks from "../Tasks/ViewTasks";
@@ -43,7 +44,7 @@ const EmployeeRoutes: React.FunctionComponent = () => {
         <Route path={JOBLIST} component={JobList} />
         <Route path={TASKLIST} component={TaskList} />
         <Route path={VERIFY_DOCS} component={VerifyDocumentation} />
-        <Route path={COMPANYPROFILE} component={CompanyProfile} />
+        <Route path={VIEW_COMPANY} component={CompanyProfile} />
         <Route path={WORKERPROFILE} component={WorkerProfile} />
         <Route path={ROOT} component={Home} />
       </Switch>

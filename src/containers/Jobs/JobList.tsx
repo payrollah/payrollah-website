@@ -22,6 +22,10 @@ import EtherContext from "../../contexts/EtherContext";
 import UserContext from "../../contexts/UserContext";
 import { BigNumber } from "@ethersproject/bignumber";
 import { flatten } from "lodash";
+import { Link } from "react-router-dom";
+import formatPath from "../../utils/formatPath";
+import { VIEW_COMPANY } from "../../constants/routePaths";
+import { ethers } from "ethers";
 
 // const useStyles = makeStyles((theme) => ({
 //   buttonContainer: {
@@ -34,6 +38,11 @@ import { flatten } from "lodash";
 
 interface AddCellProps {
   row: GridRowModel;
+}
+
+interface CompanyCellProps {
+  row: GridRowModel;
+  value: any;
 }
 
 const JobList: React.FunctionComponent = () => {
@@ -72,17 +81,17 @@ const JobList: React.FunctionComponent = () => {
               address
             );
 
+            const companyId = await contract
+              .jobOwner()
+              .then((ownerAddr) =>
+                companyContract.getCompanyIdByAddress(ownerAddr)
+              );
+
             return {
               id: taskId.toNumber(),
               jobAddr: jobAddr,
-              company: (
-                await contract
-                  .jobOwner()
-                  .then((ownerAddr) =>
-                    companyContract.getCompanyIdByAddress(ownerAddr)
-                  )
-                  .then((companyId) => companyContract.companies(companyId))
-              ).name,
+              companyId,
+              company: (await companyContract.companies(companyId)).name,
               jobTitle: await contract.title(),
               jobDescription: await contract.description(),
               taskId: taskId.toNumber(),
@@ -119,7 +128,7 @@ const JobList: React.FunctionComponent = () => {
                   return getJobData(address, contract);
                 })
               )
-            )
+            ).filter((row) => row.assignedTo === ethers.constants.AddressZero)
           );
           setLoading(false);
         });
@@ -152,13 +161,29 @@ const JobList: React.FunctionComponent = () => {
     }
   };
 
+  const CompanyCell: React.FunctionComponent<CompanyCellProps> = ({
+    row,
+    value,
+  }: CompanyCellProps) => {
+    return (
+      <Link to={formatPath(VIEW_COMPANY, { companyId: row.companyId })}>
+        {value}
+      </Link>
+    );
+  };
+
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 70, hide: true },
     {
       field: "company",
       headerName: "Company",
       width: 220,
+      resizable: true,
       disableClickEventBubbling: true,
+      // eslint-disable-next-line react/display-name
+      renderCell: (params: GridCellParams) => (
+        <CompanyCell row={params.row} value={params.value} />
+      ),
     },
     {
       field: "jobAddr",
@@ -225,9 +250,10 @@ const JobList: React.FunctionComponent = () => {
       </Typography>
       <div style={{ height: 400, width: "100%", textAlign: "center" }}>
         <DataGrid
+          autoHeight={true}
           rows={rows}
           columns={columns}
-          pageSize={5}
+          pageSize={10}
           components={{
             Toolbar: GridToolbar,
           }}
