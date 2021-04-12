@@ -8,15 +8,21 @@ import {
 } from "@material-ui/core";
 import { Job__factory } from "@payrollah/payrollah-registry";
 import { Field, Form, Formik, FormikErrors, FormikValues } from "formik";
-import { TextField } from "formik-material-ui";
+import { SimpleFileUpload } from "formik-material-ui";
 import React, { useContext } from "react";
 import EtherContext from "../../../contexts/EtherContext";
+import axios, { AxiosResponse } from "axios";
 
 interface Props {
   open: boolean;
   onClose: () => void;
   taskId: number;
   jobAddr: string;
+}
+
+interface IUploadResponse {
+  uuid: string;
+  success: boolean;
 }
 
 const SubmitTask: React.FunctionComponent<Props> = ({
@@ -32,12 +38,11 @@ const SubmitTask: React.FunctionComponent<Props> = ({
       <DialogTitle>Submit for Task ID: {taskId}</DialogTitle>
       <Formik
         initialValues={{
-          evidence: "",
+          evidence: new Blob(),
           taskId: taskId,
         }}
         validate={(values) => {
           const errors: FormikErrors<FormikValues> = {};
-
           if (!values.evidence) {
             errors.evidence = "Required";
           }
@@ -47,11 +52,24 @@ const SubmitTask: React.FunctionComponent<Props> = ({
         onSubmit={async (values) => {
           if (signer) {
             try {
+              const bodyFormData = new FormData();
+              bodyFormData.append("image", values.evidence);
+              const response: AxiosResponse<IUploadResponse> = await axios({
+                method: "post",
+                url: "https://payrollah.herokuapp.com/work/upload",
+                data: bodyFormData,
+                headers: { "Content-Type": "multipart/form-data" },
+              });
+              if (!response.data.success)
+                throw new Error("File did not upload successfully");
+              const hash = response.data.uuid;
               const jobContract = Job__factory.connect(jobAddr, signer);
-              await jobContract.submitTask(taskId, values.evidence);
+              const deferTx = await jobContract.submitTask(taskId, hash);
+              await deferTx.wait();
               onClose();
             } catch (e) {
               console.error(e);
+              onClose();
             }
           }
         }}
@@ -59,13 +77,19 @@ const SubmitTask: React.FunctionComponent<Props> = ({
         {({ submitForm, isSubmitting }) => (
           <Form>
             <DialogContent>
-              <Field
+              {/* <Field
                 component={TextField}
                 label="Hyperlink to Work"
                 name="evidence"
                 fullWidth
+              /> */}
+              <Field
+                component={SimpleFileUpload}
+                name="evidence"
+                fullWidth
+                label="Upload work"
               />
-              {isSubmitting && <LinearProgress />}
+              ;{isSubmitting && <LinearProgress />}
             </DialogContent>
             <DialogActions>
               <Button disabled={isSubmitting} onClick={onClose}>
