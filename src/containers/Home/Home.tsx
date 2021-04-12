@@ -1,5 +1,6 @@
-import { Box, makeStyles, Typography } from "@material-ui/core";
 import React from "react";
+import { Box, makeStyles } from "@material-ui/core";
+import logo from "../../payrollah_logo.png"; // with import
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -16,7 +17,14 @@ const Home: React.FunctionComponent = () => {
       alignItems="center"
       className={classes.root}
     >
-      <Typography variant="h1">Payrollah</Typography>
+      <img
+        style={{
+          height: 500,
+          width: 500,
+        }}
+        src={logo}
+        alt="Payrollah"
+      />
     </Box>
   );
 };

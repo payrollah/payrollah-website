@@ -26,7 +26,7 @@ import {
   Worker__factory,
 } from "@payrollah/payrollah-registry";
 import EtherContext from "../../contexts/EtherContext";
-// import MoodIcon from "@material-ui/icons/Mood";
+import logo from "../../payrollah_logo.png"; // with import
 import {
   COMPANYPROFILE,
   ROOT,
@@ -142,7 +142,16 @@ const Menubar: React.FunctionComponent = () => {
         onClose={() => setRegisterOpen(false)}
       />
       <Toolbar>
-        {/* <MoodIcon style={{ paddingRight: "8px", height: 30, width: 30 }} /> */}
+        <img
+          style={{
+            height: 40,
+            width: 40,
+            marginRight: "8px",
+            borderRadius: "50%",
+          }}
+          src={logo}
+          alt="Payrollah"
+        />
         <Typography variant="h6" noWrap className={classes.title}>
           Payrollah
         </Typography>
