@@ -33,6 +33,8 @@ import { Link } from "react-router-dom";
 import formatPath from "../../utils/formatPath";
 import { BigNumber } from "@ethersproject/bignumber";
 import { ethers } from "ethers";
+import axios from "axios";
+
 interface ViewTaskParams {
   jobAddr: string;
 }
@@ -160,17 +162,35 @@ const ViewTasks: React.FunctionComponent = () => {
   const LinkCell: React.FunctionComponent<LinkCellProps> = ({
     row,
   }: LinkCellProps) => {
+    // Have evidence
     if (!!row.evidence) {
-      // Have evidence
-      return (
-        <IconButton
-          onClick={() => {
-            window.open(row.evidence);
-          }}
-        >
-          <GetAppIcon />
-        </IconButton>
-      );
+      if (row.isComplete === false) {
+        // returns watermark
+        return (
+          <IconButton
+            onClick={() => {
+              window.open(
+                `https://payrollah.herokuapp.com/work/watermark/${row.evidence}`
+              );
+            }}
+          >
+            <GetAppIcon />
+          </IconButton>
+        );
+      } else {
+        //return actual work
+        return (
+          <IconButton
+            onClick={() => {
+              window.open(
+                `https://payrollah.herokuapp.com/work/getImage/${jobAddr}/${row.taskId}`
+              );
+            }}
+          >
+            <GetAppIcon />
+          </IconButton>
+        );
+      }
     } else {
       // No evidence
       return <CloseIcon style={{ width: "100%" }} />;

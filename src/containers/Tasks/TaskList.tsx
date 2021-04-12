@@ -104,7 +104,7 @@ const TaskList: React.FunctionComponent = () => {
                           companyContract.companies(companyId)
                         )
                     ).name,
-                    taskId: 1,
+                    taskId: taskId.toNumber(),
                     taskTitle: task.title,
                     taskDescription: task.description,
                     compensation: task.compensation,
