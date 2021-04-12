@@ -24,6 +24,7 @@ import ReplayIcon from "@material-ui/icons/Replay";
 import ViewWorkerProfile from "./ViewWorkerProfile/ViewWorkerProfile";
 import { useHistory, useLocation, useParams } from "react-router";
 import EtherContext from "../../../contexts/EtherContext";
+import { isAddress } from "@ethersproject/address";
 
 const useStyles = makeStyles((theme) => ({
   buttonContainer: {
@@ -69,7 +70,7 @@ const ViewCandidates: React.FunctionComponent = () => {
       // get candidate list
       try {
         let isAssignedBool = false;
-        if (assignedTo !== "Not Assigned") {
+        if (isAddress(assignedTo)) {
           isAssignedBool = true;
         }
         taskContract
@@ -204,17 +205,13 @@ const ViewCandidates: React.FunctionComponent = () => {
       field: "assign",
       width: 100,
       sortable: false,
-      headerName: "Assign",
+      headerName: isAddress(assignedTo) ? "Reassign" : "Assign",
       // eslint-disable-next-line react/display-name
       renderCell: (params: GridCellParams) => <AssignCell row={params.row} />,
       disableColumnMenu: true,
       disableClickEventBubbling: true,
     },
   ];
-
-  if (assignedTo !== "Not Assigned") {
-    columns[4]["headerName"] = "Reassign";
-  }
 
   return (
     <React.Fragment>
