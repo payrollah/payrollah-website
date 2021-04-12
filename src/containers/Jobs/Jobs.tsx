@@ -55,6 +55,10 @@ const Jobs: React.FunctionComponent = () => {
   const [rows, setRows] = useState<GridRowModel[]>([]);
   const [loading, setLoading] = useState(false);
 
+  const [count, setCount] = useState(0);
+
+  const handleUpdate = () => setCount(count + 1);
+
   const { jobCreatorContract, signer } = useContext(EtherContext);
   const { address } = useContext(UserContext);
 
@@ -105,7 +109,7 @@ const Jobs: React.FunctionComponent = () => {
 
   useEffect(() => {
     getJobList();
-  }, [getJobList]);
+  }, [getJobList, count]);
 
   const ViewCell: React.FunctionComponent<ViewCellProps> = ({
     row,
@@ -196,12 +200,17 @@ const Jobs: React.FunctionComponent = () => {
 
   return (
     <React.Fragment>
-      <CreateJob open={createJobOpen} onClose={() => setCreateJobOpen(false)} />
+      <CreateJob
+        open={createJobOpen}
+        onClose={() => setCreateJobOpen(false)}
+        onUpdate={handleUpdate}
+      />
 
       <CompleteJob
         open={completeJobOpen}
         onClose={() => setCompleteJobOpen(false)}
         jobAddr={jobAddrToComplete}
+        onUpdate={handleUpdate}
       />
       <Typography variant="h3" gutterBottom>
         Jobs

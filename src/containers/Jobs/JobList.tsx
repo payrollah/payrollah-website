@@ -46,6 +46,10 @@ const JobList: React.FunctionComponent = () => {
   const [rows, setRows] = useState<GridRowModel[]>([]);
   const [loading, setLoading] = useState(false);
 
+  const [count, setCount] = useState(0);
+
+  const handleUpdate = () => setCount(count + 1);
+
   const { address } = useContext(UserContext);
 
   const {
@@ -124,7 +128,7 @@ const JobList: React.FunctionComponent = () => {
 
   useEffect(() => {
     getJobList();
-  }, [getJobList]);
+  }, [getJobList, count]);
 
   const AddCell: React.FunctionComponent<AddCellProps> = ({
     row,
@@ -214,6 +218,7 @@ const JobList: React.FunctionComponent = () => {
         onClose={() => setAddCandidateOpen(false)}
         taskId={taskIdToAdd}
         jobAddr={jobAddrToAdd}
+        onUpdate={handleUpdate}
       />
       <Typography variant="h3" gutterBottom>
         Jobs
