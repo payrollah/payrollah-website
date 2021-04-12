@@ -130,9 +130,9 @@ const ViewCandidates: React.FunctionComponent = () => {
     return (
       <IconButton
         onClick={() => {
-          setWorkerAddrToView(row.workerAddr);
-          setWorkerIdToView(row.workerId);
-          setViewWorkerProfileOpen(true);
+          // setWorkerAddrToView(row.workerAddr);
+          // setWorkerIdToView(row.workerId);
+          // setViewWorkerProfileOpen(true);
         }}
       >
         <AccountBoxIcon />
