@@ -66,6 +66,7 @@ const App: React.FunctionComponent = () => {
   const [workerId, setWorkerId] = useState<number>();
   const [address, setAddress] = useState("");
   const [domain, setDomain] = useState("");
+  const [jwtToken, setJwtToken] = useState("");
 
   useEffect(() => {
     const { ethereum } = window as any;
@@ -128,18 +129,20 @@ const App: React.FunctionComponent = () => {
             workerId,
             address,
             domain,
+            jwtToken,
             setName,
             setIsCompany,
             setCompanyId,
             setWorkerId,
             setAddress,
             setDomain,
+            setJwtToken,
           }}
         >
           <ThemeProvider theme={theme}>
             <BrowserRouter>
               <MuiPickersUtilsProvider utils={MomentUtils}>
-                {!!etherSigner ? (
+                {!!etherSigner && (!isCompany || jwtToken.length > 0) ? (
                   <AppNavigatorAuthenticated />
                 ) : (
                   <AppNavigatorAnonymous />

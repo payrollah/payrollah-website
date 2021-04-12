@@ -27,6 +27,7 @@ import EtherContext from "../../../contexts/EtherContext";
 import UserContext from "../../../contexts/UserContext";
 import { Link } from "react-router-dom";
 import { VERIFY_DOCS } from "../../../constants/routePaths";
+import axios from "axios";
 
 interface Props {
   open: boolean;
@@ -52,6 +53,8 @@ const RegisterModal: React.FunctionComponent<Props> = ({
     setCompanyId,
     setWorkerId,
     setAddress,
+    setJwtToken,
+    setDomain,
   } = useContext(UserContext);
 
   return (
@@ -61,6 +64,7 @@ const RegisterModal: React.FunctionComponent<Props> = ({
         initialValues={{
           name: "",
           domain: "",
+          password: "",
           isCompany: false,
         }}
         validate={(values) => {
@@ -72,6 +76,10 @@ const RegisterModal: React.FunctionComponent<Props> = ({
 
           if (values.isCompany && values.domain.length <= 0) {
             errors.domain = "Required";
+          }
+
+          if (values.isCompany && values.password.length <= 0) {
+            errors.password = "Required";
           }
           return errors;
         }}
@@ -110,19 +118,57 @@ const RegisterModal: React.FunctionComponent<Props> = ({
 
             try {
               if (values.isCompany) {
-                await companyContract.createCompany(values.name, values.domain);
+                const createTx = await companyContract.createCompany(
+                  values.name,
+                  values.domain
+                );
+
+                await createTx.wait();
 
                 const companyId = await companyContract.getCompanyIdByAddress(
                   address
                 );
 
-                console.log(companyId);
+                const data = JSON.stringify({
+                  companyId: companyId.toNumber(),
+                  companyAddress: address,
+                  password: values.password,
+                });
+
+                await axios({
+                  method: "post",
+                  url: "https://payrollah.herokuapp.com/company/signup",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  data: data,
+                })
+                  .then(function (response) {
+                    const loginData = JSON.stringify({
+                      companyAddress: address,
+                      password: values.password,
+                    });
+
+                    return axios({
+                      method: "post",
+                      url: "https://payrollah.herokuapp.com/company/login",
+                      headers: {
+                        "Content-Type": "application/json",
+                      },
+                      data: loginData,
+                    });
+                  })
+                  .then(function (response) {
+                    return setJwtToken(response.data.accessToken);
+                  })
+                  .catch(function (error) {
+                    console.log(error);
+                  });
 
                 setCompanyId(companyId.toNumber());
                 setIsCompany(true);
-
-                const company = await companyContract.companies(companyId);
-                setName(company.name);
+                setDomain(values.domain);
+                setName(values.name);
               } else {
                 await workerContract.createWorker();
 
@@ -169,6 +215,14 @@ const RegisterModal: React.FunctionComponent<Props> = ({
                     name="name"
                     fullWidth
                     required
+                  />
+                  <Field
+                    component={TextField}
+                    label="Password"
+                    name="password"
+                    fullWidth
+                    required
+                    type="password"
                   />
                 </Fragment>
               )}
