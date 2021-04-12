@@ -203,11 +203,18 @@ const TaskList: React.FunctionComponent = () => {
       <Typography variant="h3" gutterBottom>
         Your Tasks
       </Typography>
-      <div style={{ height: 400, width: "100%", textAlign: "center" }}>
+      <div
+        style={{
+          height: 750,
+          width: "100%",
+          textAlign: "center",
+        }}
+      >
         <DataGrid
+          autoHeight={true}
           rows={rows}
           columns={columns}
-          pageSize={5}
+          pageSize={10}
           components={{
             Toolbar: GridToolbar,
           }}

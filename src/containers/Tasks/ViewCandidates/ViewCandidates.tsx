@@ -187,12 +187,12 @@ const ViewCandidates: React.FunctionComponent = () => {
   };
 
   const columns: GridColDef[] = [
-    { field: "id", headerName: "ID", width: 70 },
+    { field: "id", headerName: "ID", flex: 0.4 },
     { field: "workerId", headerName: "workerId", width: 70, hide: true },
     {
       field: "workerAddr",
       headerName: "Worker Address",
-      width: 500,
+      flex: 3,
       disableClickEventBubbling: true,
     },
     {
@@ -265,9 +265,10 @@ const ViewCandidates: React.FunctionComponent = () => {
       </Typography>
       <div style={{ height: 400, width: "100%", textAlign: "center" }}>
         <DataGrid
+          autoHeight={true}
           rows={rows}
           columns={columns}
-          pageSize={5}
+          pageSize={10}
           components={{
             Toolbar: GridToolbar,
           }}
