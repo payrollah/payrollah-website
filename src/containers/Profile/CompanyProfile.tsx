@@ -4,11 +4,13 @@ import BlockIcon from "@material-ui/icons/Block";
 import DisableCompany from "./DisableCompany/DisableCompany";
 import BusinessIcon from "@material-ui/icons/Business";
 import UserContext from "../../contexts/UserContext";
+import VerificationTag from "../Verify/VerificationTag";
 
 const useStyles = makeStyles((theme) => ({
   buttonContainer: {
     display: "flex",
-    justifyContent: "flex-end",
+    justifyContent: "center",
+    alignItems: "center",
     paddingTop: "1em",
     paddingBottom: "1em",
   },
@@ -18,6 +20,12 @@ const useStyles = makeStyles((theme) => ({
   td: {
     padding: "20px",
     borderBottom: "1px solid grey",
+  },
+  verificationTag: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: "20px",
   },
 }));
 
@@ -42,9 +50,13 @@ const CompanyProfile: React.FunctionComponent = () => {
         className={classes.buttonContainer}
       >
         <BusinessIcon style={{ height: 53, width: 53, paddingRight: "10px" }} />
-        <Typography variant="h3" gutterBottom style={{ width: "100%" }}>
+        <Typography variant="h3" style={{ marginRight: "auto" }}>
           Company Profile
         </Typography>
+        <div className={classes.verificationTag}>
+          <VerificationTag address={address} domain={domain} />
+        </div>
+
         <Button
           style={{ height: 40, width: 250 }}
           variant="contained"
