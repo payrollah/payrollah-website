@@ -15,7 +15,6 @@ import {
 } from "@material-ui/data-grid";
 import AccountBoxIcon from "@material-ui/icons/AccountBox";
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
-import AssignTask from "./ReassignTask/ReassignTask";
 import ReassignTask from "./ReassignTask/ReassignTask";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
@@ -24,6 +23,8 @@ import ReplayIcon from "@material-ui/icons/Replay";
 import ViewWorkerProfile from "./ViewWorkerProfile/ViewWorkerProfile";
 import { useHistory, useLocation, useParams } from "react-router";
 import EtherContext from "../../../contexts/EtherContext";
+import { isAddress } from "@ethersproject/address";
+import AssignTask from "./AssignTask/AssignTask";
 
 const useStyles = makeStyles((theme) => ({
   buttonContainer: {
@@ -69,7 +70,7 @@ const ViewCandidates: React.FunctionComponent = () => {
       // get candidate list
       try {
         let isAssignedBool = false;
-        if (Number(assignedTo) !== 0) {
+        if (isAddress(assignedTo)) {
           isAssignedBool = true;
         }
         taskContract
@@ -204,17 +205,13 @@ const ViewCandidates: React.FunctionComponent = () => {
       field: "assign",
       width: 100,
       sortable: false,
-      headerName: "Assign",
+      headerName: isAddress(assignedTo) ? "Reassign" : "Assign",
       // eslint-disable-next-line react/display-name
       renderCell: (params: GridCellParams) => <AssignCell row={params.row} />,
       disableColumnMenu: true,
       disableClickEventBubbling: true,
     },
   ];
-
-  if (Number(assignedTo) !== 0) {
-    columns[4]["headerName"] = "Reassign";
-  }
 
   return (
     <React.Fragment>
