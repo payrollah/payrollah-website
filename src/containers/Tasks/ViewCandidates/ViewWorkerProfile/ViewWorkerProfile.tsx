@@ -55,7 +55,7 @@ const ViewWorkerProfile: React.FunctionComponent<Props> = ({
 
   const getTaskList = useCallback(() => {
     setLoading(true);
-    if (taskContract && signer) {
+    if (taskContract && signer && workerAddrToView) {
       // get list of worker past tasks
       const transferLogFilter = taskContract.filters.TaskApproved(
         null,
