@@ -7,12 +7,14 @@ interface UserProvider {
   workerId?: number;
   address: string;
   domain: string;
+  jwtToken: string;
   setName: (name: string) => void;
   setAddress: (address: string) => void;
   setIsCompany: (value: boolean) => void;
   setCompanyId: (value: number) => void;
   setWorkerId: (value: number) => void;
   setDomain: (domain: string) => void;
+  setJwtToken: (token: string) => void;
 }
 
 const UserContext = React.createContext<UserProvider>({
@@ -20,6 +22,7 @@ const UserContext = React.createContext<UserProvider>({
   isCompany: false,
   address: "",
   domain: "",
+  jwtToken: "",
   setName: (name: string) => {
     return;
   },
@@ -36,6 +39,9 @@ const UserContext = React.createContext<UserProvider>({
     return;
   },
   setDomain: (name: string) => {
+    return;
+  },
+  setJwtToken: (tokem: string) => {
     return;
   },
 });
