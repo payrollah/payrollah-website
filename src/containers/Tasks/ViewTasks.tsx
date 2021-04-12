@@ -34,6 +34,7 @@ import formatPath from "../../utils/formatPath";
 import { BigNumber } from "@ethersproject/bignumber";
 import { ethers } from "ethers";
 import ImageModal from "./ImageModal/ImageModal";
+import { ExternalLinkEtherscanAddress } from "./ExternalLink";
 
 interface ViewTaskParams {
   jobAddr: string;
@@ -373,7 +374,8 @@ const ViewTasks: React.FunctionComponent = () => {
         </Link>
       </Container>
       <Typography variant="subtitle1" gutterBottom>
-        Job Address: {jobAddr}
+        Job Address:{" "}
+        <ExternalLinkEtherscanAddress name={jobAddr} address={jobAddr} />
       </Typography>
       <Container
         disableGutters
