@@ -95,7 +95,9 @@ const ViewWorkerProfile: React.FunctionComponent<Props> = ({
       return (
         <IconButton
           onClick={() => {
-            window.open(row.evidence);
+            window.open(
+              `https://payrollah.herokuapp.com/work/watermark/${row.evidence}`
+            );
           }}
         >
           <GetAppIcon />
