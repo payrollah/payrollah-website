@@ -18,6 +18,7 @@ import {
 import EtherContext from "../../../../contexts/EtherContext";
 import { BigNumber } from "@ethersproject/bignumber";
 import GetAppIcon from "@material-ui/icons/GetApp";
+import { Task } from "@payrollah/payrollah-registry/dist/ts/contracts";
 
 interface Props {
   open: boolean;
@@ -41,24 +42,35 @@ const ViewWorkerProfile: React.FunctionComponent<Props> = ({
   const [rows, setRows] = useState<GridRowModel[]>([]);
   const [loading, setLoading] = useState(false);
 
+  const getTaskData = async (taskId: BigNumber, contract: Task) => {
+    const task = await contract.tasks(taskId);
+
+    return {
+      id: taskId.toNumber(),
+      taskTitle: task.title,
+      evidence: task.evidence,
+      isComplete: task.isComplete,
+    };
+  };
+
   const getTaskList = useCallback(() => {
     setLoading(true);
     if (taskContract && signer) {
       // get list of worker past tasks
+      const transferLogFilter = taskContract.filters.TaskApproved(
+        null,
+        workerAddrToView,
+        null
+      );
       try {
         taskContract
-          .getTaskByWorkerAddress(workerAddrToView)
-          .then(async (taskIds: BigNumber[]) => {
+          .queryFilter(transferLogFilter, 0)
+          .then(async (eventList) => {
             setRows(
               await Promise.all(
-                taskIds.map(async (taskId: BigNumber) => {
-                  const task = await taskContract.tasks(taskId);
-                  return {
-                    id: taskId.toNumber(),
-                    taskTitle: task.title,
-                    evidence: task.evidence,
-                    isComplete: task.isComplete,
-                  };
+                eventList.map((event) => {
+                  const taskId = event.args.taskId;
+                  return getTaskData(taskId, taskContract);
                 })
               )
             );
