@@ -15,6 +15,7 @@ import {
 } from "@material-ui/data-grid";
 import AccountBoxIcon from "@material-ui/icons/AccountBox";
 import ThumbUpIcon from "@material-ui/icons/ThumbUp";
+import AssignTask from "./AssignTask/AssignTask";
 import ReassignTask from "./ReassignTask/ReassignTask";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
@@ -24,7 +25,6 @@ import ViewWorkerProfile from "./ViewWorkerProfile/ViewWorkerProfile";
 import { useHistory, useLocation, useParams } from "react-router";
 import EtherContext from "../../../contexts/EtherContext";
 import { isAddress } from "@ethersproject/address";
-import AssignTask from "./AssignTask/AssignTask";
 
 const useStyles = makeStyles((theme) => ({
   buttonContainer: {

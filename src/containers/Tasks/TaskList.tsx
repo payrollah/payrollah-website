@@ -126,12 +126,13 @@ const TaskList: React.FunctionComponent = () => {
   const SubmitCell: React.FunctionComponent<SubmitCellProps> = ({
     row,
   }: SubmitCellProps) => {
+    console.log(row.evidenceSubmitted);
     return row.evidenceSubmitted ? (
       <div>Submitted</div>
     ) : (
       <IconButton
         onClick={() => {
-          setTaskIdToSubmit(row.taskId);
+          setTaskIdToSubmit(Number(row.id));
           setJobAddrToSubmit(row.jobAddr);
           setSubmitTaskOpen(true);
         }}
@@ -209,7 +210,7 @@ const TaskList: React.FunctionComponent = () => {
         jobAddr={jobAddrToSubmit}
       />
       <Typography variant="h3" gutterBottom>
-        Pending Tasks
+        Your Tasks
       </Typography>
       <div style={{ height: 400, width: "100%", textAlign: "center" }}>
         <DataGrid
