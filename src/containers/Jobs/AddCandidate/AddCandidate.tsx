@@ -17,6 +17,7 @@ interface Props {
   onClose: () => void;
   taskId: number;
   jobAddr: string;
+  onUpdate: () => void;
 }
 
 // Call Job contract function addCandidate(taskId)
@@ -26,6 +27,7 @@ const AddCandidate: React.FunctionComponent<Props> = ({
   onClose,
   taskId,
   jobAddr,
+  onUpdate,
 }: Props) => {
   const { signer } = useContext(EtherContext);
   return (
@@ -39,7 +41,9 @@ const AddCandidate: React.FunctionComponent<Props> = ({
           if (signer) {
             try {
               const jobContract = Job__factory.connect(jobAddr, signer);
-              await jobContract.addCandidates(taskId);
+              const add = await jobContract.addCandidates(taskId);
+              await add.wait();
+              onUpdate();
               onClose();
             } catch (e) {
               console.error(e);

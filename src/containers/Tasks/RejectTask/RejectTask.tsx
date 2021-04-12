@@ -17,6 +17,7 @@ interface Props {
   onClose: () => void;
   taskId: number;
   jobAddr: string;
+  onUpdate: () => void;
 }
 
 // Call Job contract function rejectEvidence(taskId)
@@ -26,6 +27,7 @@ const RejectTask: React.FunctionComponent<Props> = ({
   onClose,
   taskId,
   jobAddr,
+  onUpdate,
 }: Props) => {
   const { signer } = useContext(EtherContext);
 
@@ -37,11 +39,13 @@ const RejectTask: React.FunctionComponent<Props> = ({
         initialValues={{
           taskId: taskId,
         }}
-        onSubmit={(values) => {
+        onSubmit={async (values) => {
           if (signer) {
             try {
               const jobContract = Job__factory.connect(jobAddr, signer);
-              jobContract.rejectEvidence(taskId);
+              const reject = await jobContract.rejectEvidence(taskId);
+              await reject.wait();
+              onUpdate();
               onClose();
             } catch (e) {
               console.error(e);

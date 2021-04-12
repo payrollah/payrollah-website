@@ -44,19 +44,9 @@ const TaskList: React.FunctionComponent = () => {
   const [rows, setRows] = useState<GridRowModel[]>([]);
   const [loading, setLoading] = useState(false);
 
-  // const rows = [
-  //   {
-  //     id: 1,
-  //     jobAddr: "0x....",
-  //     company: "ABC Company",
-  //     jobTitle: "ABC Developer",
-  //     jobDescription: "Job Description",
-  //     taskId: 1,
-  //     taskTitle: "Backend Implementation",
-  //     taskDescription: "Develop the backend for ....",
-  //     compensation: 10,
-  //   },
-  // ];
+  const [count, setCount] = useState(0);
+
+  const handleUpdate = () => setCount(count + 1);
 
   const {
     jobCreatorContract,
@@ -121,7 +111,7 @@ const TaskList: React.FunctionComponent = () => {
 
   useEffect(() => {
     getTaskList();
-  }, [getTaskList]);
+  }, [getTaskList, count]);
 
   const SubmitCell: React.FunctionComponent<SubmitCellProps> = ({
     row,
@@ -208,6 +198,7 @@ const TaskList: React.FunctionComponent = () => {
         onClose={() => setSubmitTaskOpen(false)}
         taskId={taskIdToSubmit}
         jobAddr={jobAddrToSubmit}
+        onUpdate={handleUpdate}
       />
       <Typography variant="h3" gutterBottom>
         Your Tasks

@@ -170,8 +170,8 @@ const RegisterModal: React.FunctionComponent<Props> = ({
                 setDomain(values.domain);
                 setName(values.name);
               } else {
-                await workerContract.createWorker();
-
+                const create = await workerContract.createWorker();
+                await create.wait();
                 const workerId = await workerContract.getWorkerIdByAddress(
                   address
                 );

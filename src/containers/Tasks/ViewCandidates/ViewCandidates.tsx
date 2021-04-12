@@ -64,6 +64,10 @@ const ViewCandidates: React.FunctionComponent = () => {
   const [rows, setRows] = useState<GridRowModel[]>([]);
   const [loading, setLoading] = useState(false);
 
+  const [count, setCount] = useState(0);
+
+  const handleUpdate = () => setCount(count + 1);
+
   const getCandidateList = useCallback(() => {
     setLoading(true);
     if (taskContract && workerContract && signer) {
@@ -110,7 +114,7 @@ const ViewCandidates: React.FunctionComponent = () => {
 
   useEffect(() => {
     getCandidateList();
-  }, [getCandidateList]);
+  }, [getCandidateList, count]);
 
   // const [viewWorkerProfileOpen, setViewWorkerProfileOpen] = useState(false);
   // const [workerAddrToView, setWorkerAddrToView] = useState("");
@@ -228,6 +232,7 @@ const ViewCandidates: React.FunctionComponent = () => {
         taskId={taskIdToAssign}
         workerAddr={workerAddrToAssign}
         jobAddr={jobAddr}
+        onUpdate={handleUpdate}
       />
       <ReassignTask
         open={reassignTaskOpen}
@@ -235,6 +240,7 @@ const ViewCandidates: React.FunctionComponent = () => {
         taskId={taskIdToReassign}
         workerAddr={workerAddrToReassign}
         jobAddr={jobAddr}
+        onUpdate={handleUpdate}
       />
       <Container
         disableGutters

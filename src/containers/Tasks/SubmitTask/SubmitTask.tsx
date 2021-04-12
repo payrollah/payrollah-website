@@ -18,6 +18,7 @@ interface Props {
   onClose: () => void;
   taskId: number;
   jobAddr: string;
+  onUpdate: () => void;
 }
 
 interface IUploadResponse {
@@ -30,6 +31,7 @@ const SubmitTask: React.FunctionComponent<Props> = ({
   onClose,
   taskId,
   jobAddr,
+  onUpdate,
 }: Props) => {
   const { signer } = useContext(EtherContext);
 
@@ -66,6 +68,7 @@ const SubmitTask: React.FunctionComponent<Props> = ({
               const jobContract = Job__factory.connect(jobAddr, signer);
               const deferTx = await jobContract.submitTask(taskId, hash);
               await deferTx.wait();
+              onUpdate();
               onClose();
             } catch (e) {
               console.error(e);
