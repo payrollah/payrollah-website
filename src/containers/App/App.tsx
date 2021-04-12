@@ -142,7 +142,7 @@ const App: React.FunctionComponent = () => {
           <ThemeProvider theme={theme}>
             <BrowserRouter>
               <MuiPickersUtilsProvider utils={MomentUtils}>
-                {!!etherSigner ? (
+                {!!etherSigner && (!isCompany || jwtToken.length > 0) ? (
                   <AppNavigatorAuthenticated />
                 ) : (
                   <AppNavigatorAnonymous />
