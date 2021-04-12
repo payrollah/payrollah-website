@@ -70,12 +70,7 @@ const ViewCandidates: React.FunctionComponent = () => {
       // get candidate list
       try {
         let isAssignedBool = false;
-<<<<<<< HEAD
         if (isAddress(assignedTo)) {
-=======
-        console.log(assignedTo);
-        if (Number(assignedTo) !== 0) {
->>>>>>> feat: added evidence
           isAssignedBool = true;
         }
         taskContract
