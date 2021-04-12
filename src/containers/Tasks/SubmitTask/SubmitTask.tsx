@@ -8,7 +8,7 @@ import {
 } from "@material-ui/core";
 import { Job__factory } from "@payrollah/payrollah-registry";
 import { Field, Form, Formik, FormikErrors, FormikValues } from "formik";
-import { TextField, SimpleFileUpload } from "formik-material-ui";
+import { SimpleFileUpload } from "formik-material-ui";
 import React, { useContext } from "react";
 import EtherContext from "../../../contexts/EtherContext";
 import axios, { AxiosResponse } from "axios";
