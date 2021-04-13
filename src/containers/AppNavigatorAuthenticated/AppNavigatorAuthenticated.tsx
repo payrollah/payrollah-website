@@ -12,6 +12,7 @@ import {
   COMPANYPROFILE,
   WORKERPROFILE,
   VIEW_COMPANY,
+  WATERMARK_DOCS,
 } from "../../constants/routePaths";
 import Jobs from "../Jobs/Jobs";
 import ViewTasks from "../Tasks/ViewTasks";
@@ -25,6 +26,7 @@ import Menubar from "../Menubar/Menubar";
 import Sidebar from "../Sidebar/Sidebar";
 import UserContext from "../../contexts/UserContext";
 import Home from "../Home/Home";
+import WatermarkDocumentation from "../Watermark/WatermarkDocumentation";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -43,6 +45,7 @@ const EmployeeRoutes: React.FunctionComponent = () => {
       <Switch>
         <Route path={JOBLIST} component={JobList} />
         <Route path={TASKLIST} component={TaskList} />
+        <Route path={WATERMARK_DOCS} component={WatermarkDocumentation} />
         <Route path={VERIFY_DOCS} component={VerifyDocumentation} />
         <Route path={VIEW_COMPANY} component={CompanyProfile} />
         <Route path={WORKERPROFILE} component={WorkerProfile} />
@@ -60,6 +63,7 @@ const CompanyRoutes: React.FunctionComponent = () => {
         <Route path={JOBS} component={Jobs} />
         <Route path={VIEWTASKS} component={ViewTasks} />
         <Route path={VIEWCANDIDATES} component={ViewCandidates} />
+        <Route path={WATERMARK_DOCS} component={WatermarkDocumentation} />
         <Route path={VERIFY_DOCS} component={VerifyDocumentation} />
         <Route path={JOBLIST} component={JobList} />
         <Route path={TASKLIST} component={TaskList} />
