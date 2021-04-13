@@ -288,7 +288,7 @@ const ViewTasks: React.FunctionComponent = () => {
     },
     {
       field: "viewCandidates",
-      width: 110,
+      width: 120,
       sortable: false,
       headerName: "Candidates",
       // eslint-disable-next-line react/display-name
@@ -299,7 +299,7 @@ const ViewTasks: React.FunctionComponent = () => {
     {
       field: "assignedTo",
       headerName: "Hiree",
-      width: 120,
+      width: 140,
       disableClickEventBubbling: true,
     },
     {
@@ -312,7 +312,7 @@ const ViewTasks: React.FunctionComponent = () => {
     },
     {
       field: "complete",
-      width: 80,
+      width: 90,
       sortable: false,
       headerName: "Accept",
       // eslint-disable-next-line react/display-name
@@ -322,7 +322,7 @@ const ViewTasks: React.FunctionComponent = () => {
     },
     {
       field: "reject",
-      width: 80,
+      width: 90,
       sortable: false,
       headerName: "Reject",
       // eslint-disable-next-line react/display-name

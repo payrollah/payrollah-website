@@ -181,7 +181,7 @@ const TaskList: React.FunctionComponent = () => {
     },
     {
       field: "submit",
-      width: 80,
+      width: 90,
       sortable: false,
       headerName: "Submit",
       // eslint-disable-next-line react/display-name
