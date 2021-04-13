@@ -1,8 +1,9 @@
 import { makeStyles, Toolbar } from "@material-ui/core";
 import React from "react";
 import { Redirect, Route, RouteComponentProps, Switch } from "react-router-dom";
-import { VERIFY_DOCS, ROOT } from "../../constants/routePaths";
+import { WATERMARK_DOCS, VERIFY_DOCS, ROOT } from "../../constants/routePaths";
 import VerifyDocumentation from "../Verify/VerifyDocumentation";
+import WatermarkDocumentation from "../Watermark/WatermarkDocumentation";
 import Menubar from "../Menubar/Menubar";
 import Home from "../Home/Home";
 
@@ -22,6 +23,7 @@ const Routes: React.FunctionComponent = () => {
     <div>
       <Switch>
         <Route path={VERIFY_DOCS} component={VerifyDocumentation} />
+        <Route path={WATERMARK_DOCS} component={WatermarkDocumentation} />
         <Route
           path={ROOT}
           render={(props: RouteComponentProps) =>

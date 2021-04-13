@@ -8,6 +8,7 @@ export const VIEWCANDIDATES = "/candidates/:jobAddr/:taskId";
 export const JOBLIST = "/joblist";
 export const TASKLIST = "/tasklist";
 export const VERIFY_DOCS = "/docs/verify";
+export const WATERMARK_DOCS = "/docs/watermark";
 export const ROOT = "/";
 export const COMPANYPROFILE = "/company";
 export const WORKERPROFILE = "/worker";
