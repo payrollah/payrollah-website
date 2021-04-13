@@ -1,9 +1,11 @@
 import {
+  Divider,
   Drawer,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
+  ListSubheader,
   makeStyles,
   Toolbar,
 } from "@material-ui/core";
@@ -19,8 +21,11 @@ import {
   TASKLIST,
   COMPANYPROFILE,
   WORKERPROFILE,
+  VERIFY_DOCS,
+  WATERMARK_DOCS,
 } from "../../constants/routePaths";
 import UserContext from "../../contexts/UserContext";
+import ListIcon from "@material-ui/icons/List";
 
 const drawerWidth = 240;
 
@@ -74,6 +79,27 @@ const workerMenuList = [
   },
 ];
 
+const companyDocsMenuList = [
+  {
+    path: VERIFY_DOCS,
+    label: "DNS Setup",
+    icon: <ListIcon />,
+  },
+  {
+    path: WATERMARK_DOCS,
+    label: "Evidence Watermark",
+    icon: <ListIcon />,
+  },
+];
+
+const workerDocsMenuList = [
+  {
+    path: WATERMARK_DOCS,
+    label: "Evidence Watermark",
+    icon: <ListIcon />,
+  },
+];
+
 const Sidebar: React.FunctionComponent = () => {
   const classes = useStyles();
   const { isCompany } = useContext(UserContext);
@@ -98,19 +124,25 @@ const Sidebar: React.FunctionComponent = () => {
             </Link>
           ))}
         </List>
-        {/* <Divider />
-        <List>
-          {["All mail", "Trash", "Spam"].map((text, index) => (
-            <Link to={"/page2"} key={text}>
-              <ListItem button key={text}>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            </Link>
-          ))}
-        </List> */}
+        <Divider />
+        <List
+          subheader={
+            <ListSubheader component="div" id="nested-list-subheader">
+              Docs
+            </ListSubheader>
+          }
+        >
+          {(isCompany ? companyDocsMenuList : workerDocsMenuList).map(
+            (menu) => (
+              <Link to={menu.path} key={menu.path} className={classes.link}>
+                <ListItem button>
+                  <ListItemIcon>{menu.icon}</ListItemIcon>
+                  <ListItemText primary={menu.label} />
+                </ListItem>
+              </Link>
+            )
+          )}
+        </List>
       </div>
     </Drawer>
   );
